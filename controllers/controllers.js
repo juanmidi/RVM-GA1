@@ -89,18 +89,18 @@ app.controller('reciboCtrl', function ($scope, $routeParams, services, $window, 
     }
 
     $scope.alumno_id = $routeParams.AlumnoID;
-    
+
 })
 
 app.controller('facturacionCtrl', function ($scope, services, $routeParams) {
+
+    var suma = 0;
 
     $scope.init = function () {
         //carga la fecha actual en el controlador
         var fecha = format_fecha_d(Date());
         $("#datepicker").val(fecha);
     }
-
-    $scope.init();
 
     angular.element(document).ready(function () {
         $scope.verFacturacion();
@@ -117,8 +117,6 @@ app.controller('facturacionCtrl', function ($scope, services, $routeParams) {
         });
     }
 
-    var suma = 0;
-
     $scope.getTotal = function () {
         if ($scope.facturacion != undefined) {
             var total = 0;
@@ -129,6 +127,29 @@ app.controller('facturacionCtrl', function ($scope, services, $routeParams) {
             return total;
         }
     }
+
+    $scope.resumen = function (dia) {
+        if (dia) {
+            $("#datepicker").removeClass("hidden");
+            $("#anio").addClass("hidden");
+            $("#li-dia").addClass("active");
+            $("#li-resumen").removeClass("active");
+            $("#lbl-fecha").text("Fecha");
+            $("#div-factura").removeClass("hidden");
+            $("#div-resumen").addClass("hidden");
+        } else {
+            $("#datepicker").addClass("hidden");
+            $("#anio").removeClass("hidden");
+            $("#li-dia").removeClass("active");
+            $("#li-resumen").addClass("active");
+            $("#lbl-fecha").text("Año");
+            $("#div-factura").addClass("hidden");
+            $("#div-resumen").removeClass("hidden");
+        }
+    }
+
+    $scope.init();
+
 });
 
 app.controller('morososCtrl', function ($scope, services, $routeParams, $location) {
@@ -293,28 +314,28 @@ app.controller('cursosCtrl', function ($scope, services, configuracion) {
         console.log(data.data)
     })
 
-    $scope.caca = function(id, mostrar){
+    $scope.caca = function (id, mostrar) {
         console.log(id)
-        swal("id usuario: " + id );
-    }    
-/*
-    $scope.cursoClick = function(id){
-        $("#curso-" + id).removeClass("hidden");
-    } 
+        swal("id usuario: " + id);
+    }
+    /*
+        $scope.cursoClick = function(id){
+            $("#curso-" + id).removeClass("hidden");
+        } 
 
-    $scope.cursoLeave = function(id){
-        $("#curso-" + id).addClass("hidden");
-    } 
+        $scope.cursoLeave = function(id){
+            $("#curso-" + id).addClass("hidden");
+        } 
 
-    $scope.profeClick = function(id, idx){
-        console.log(id, idx)
-        // $("#profe-" + id).removeClass("hidden");
-        console.log($(this).text());   
-    } 
+        $scope.profeClick = function(id, idx){
+            console.log(id, idx)
+            // $("#profe-" + id).removeClass("hidden");
+            console.log($(this).text());   
+        } 
 
-    $scope.profeLeave = function(id){
-        $("#profe-" + id).addClass("hidden");
-    } 
-*/
+        $scope.profeLeave = function(id){
+            $("#profe-" + id).addClass("hidden");
+        } 
+    */
 
 })
