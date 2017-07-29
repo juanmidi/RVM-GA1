@@ -639,7 +639,7 @@ private function updateRecibo(){
 
 			$query="SELECT Sum(servicios_r.importe) AS SumaDeimporte
 					FROM servicios_r
-					WHERE MONTH(servicios_r.fecha) =$mes
+					WHERE MONTH(servicios_r.fecha) = $mes
 					GROUP BY  MONTH(servicios_r.fecha)";
 			
 			$r = $this->mysqli->query($query) or die($this->mysqli->error.__LINE__);
