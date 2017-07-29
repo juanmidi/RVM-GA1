@@ -1,0 +1,26 @@
+TODO
+
+
+en el server
+
+13-07-17
+pasar el campo fecha a date
+    en servicios_r
+    en alumnos
+
+en usuarios
+
+cambiar id_privilegio por 'role'
+
+
+agregar la tabla 'presentes'
+
+
+24/07/17
+
+en tabla ALUMNOS 
+    cambiar el campo "fecha_nac" de datetime a DATE 
+
+Cursos
+    agregar clave a id
+

@@ -1,0 +1,98 @@
+<style>
+    .col-centered {
+        display: inline-block;
+        float: none;
+        /* reset the text-align */
+        text-align: left;
+        /* inline-block space fix */
+        margin-right: -4px;
+    }
+
+    .row-centered {
+        text-align: center;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="loading-spiner-holder" data-loading>
+        <div>
+            <img src="img/load.gif" />
+            <span>cargando...</span>
+        </div>
+    </div>
+    <div>
+        <h1>Listado de Presentes</h1>
+    </div>
+
+    <div class="row">
+        <header>
+            <h3>{{title}}</h3>
+        </header>
+
+        <div class="col-sm-4">
+            <label>Fecha</label>
+            <input id="datepicker" type="date" class="form-control">
+        </div>
+        <!-- cursos -->
+        <div class="form-group">
+            <div class="col-sm-4">
+                <label> Curso </label>
+                <select id="curso" class="form-control">
+                    <option ng-repeat="curso in cursos" value="{{curso.id}}">{{curso.nombre}}</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-4">
+                <div class="row text-center">
+                    <div>Total alumnos: {{totalAlumnos}}</div>
+                </div>
+                <div class="row row-centered">
+                    <div class="bg-primary text-white">Presentes: {{total}}</div>
+                </div>
+                <div class="row row-centered">
+                    <div>Ausentes: {{totalAlumnos - total | number}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <h4>{{fechaentexto}}</h4>
+    <div class="row">
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered table-condensed">
+                <thead>
+                    <th class="hidden">idalumno&nbsp;</th>
+                    <th>Alumnos&nbsp;</th>
+                    <th>Presentes&nbsp;</th>
+                </thead>
+                <tbody>
+                    <tr id="fila-{{alumno.idalumno}}" ng-repeat="alumno in listado | filter: alumno">
+                        <td class="hidden">{{alumno.idalumno}}</td>
+                        <td>{{alumno.nombrealumno}}</td>
+                        <td>
+                             <!-- <input type="checkbox" ng-model="check" ng-click="totalPresentes()" 
+                                ng-change="actualizar(alumno.idalumno, check)"
+                                ng-checked={{alumno.presente}} ng-true-value="1" ng-false-value="0"> 
+                             -->
+                            
+                             <!-- <input type="checkbox" ng-model="check" 
+                                ng-change="caca(check)"> -->
+                                 
+                                 <!-- <input type="checkbox" ng-model="check" 
+                                ng-click="actualizar(alumno.idalumno, check)"
+                                ng-checked={{alumno.presente}}
+                                >  -->
+                             <input type="checkbox" ng-model="check" 
+                                ng-click="actualizar(alumno.idalumno, check)"
+                                ng-checked={{alumno.presente}} ng-true-value="1" ng-false-value="0"> 
+                             
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<p>&nbsp;</p>
+<p>&nbsp;</p>

@@ -1,0 +1,56 @@
+<div class="loading-spiner-holder" data-loading>
+    <div>
+        <img src="img/load.gif" />
+        <span>cargando...</span>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <h1>Cursos</h1>
+    <div class="row">
+        <form class="form-group">
+            <div class="col-sm-3">
+                <label>Filtro:</label><input class="form-control" type="text" name="cursos" ng-model="filterCurso" />
+            </div>
+        </form>
+        <div class="col-sm-9">
+            <a class="btn btn-default navbar-btn" role="button" href="#"><span class="glyphicon glyphicon-plus"></span>Agregar Curso</a>
+        </div>
+    </div>
+<p>&nbsp;</p>
+    <div class="row">
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered table-condensed">
+                <thead>
+                    <th>Cursos</th>
+                    <th>Profesores</th>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="curso in cursos | filter: filterCurso">
+                        <td class="col-xs-6 ">
+                            <div class="tools-popup">
+                                {{curso.nombre}}
+                                    <span id="profe-{{cp.id_usuario}}" class="hidden">
+                                        <i ng-click="caca(cp.id_usuario)" class="glyphicon glyphicon-remove"></i>
+                                        <i ng-click="caca(cp.id_usuario)" class="glyphicon glyphicon-pencil"></i>
+                                    </span>
+                            </div>
+                        </td>
+                        <td class="col-xs-6">
+                            <div ng-repeat="cp in curso.profesores">
+                                <div class="tools-popup">
+                                    {{cp.nombre}} {{cp.apellido}}
+                                    <span id="profe-{{cp.id_usuario}}" class="hidden">
+                                        <i ng-click="caca(cp.id_usuario)" class="glyphicon glyphicon-remove"></i>
+                                        <i ng-click="caca(cp.id_usuario)" class="glyphicon glyphicon-pencil"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+

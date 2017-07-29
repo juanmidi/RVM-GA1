@@ -1,0 +1,117 @@
+<style>
+    .highlight {
+        background-color: #F5DA81 !important;
+    }
+</style>
+<div class="loading-spiner-holder" data-loading>
+    <div>
+        <img src="img/load.gif" />
+        <span>cargando...</span>
+    </div>
+</div>
+<div class="container-fluid">
+    <div id="original" class="row rojo">
+        <div class="row">
+            <div class="col-xs-5">
+                <img src="img/logo-64.png" class="img-rounded" alt="Gimnasio" width="60" height="60">
+                <h4 id="gimnasio">Gimnasio<small>&nbsp;- Escuela de Fútbol</small></h4>
+            </div>
+            <div class="col-xs-2"><image class="center-block" src="img/x.png"></image></div>
+            <div class="col-xs-5">
+                <div class="align-top pull-right">
+                    <div><h4 id="recibo">RECIBO</h4></div>
+                    <div id="numero">N° {{numero}}</div>
+                    <div id="fecha">Fecha: {{fecha | date: "dd/MM/yyyy"}}</div>
+                    <div id="hora">Hora: {{hora}}</div>
+                </div>
+            </div>
+        </div>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="navbar-header"> &nbsp;&nbsp;
+                <a class="btn btn-default navbar-btn" role="button" href="#/recibo/{{alumno_id}}/mes/12"><span class="glyphicon glyphicon-list-alt"></span>&nbsp;Deuda anual</a>
+                <a id="btn_imprimir" class="btn btn-default navbar-btn" role="button" ng-click="imprimir()"><span class="glyphicon glyphicon-print"></span>&nbsp;Imprimir</a>
+                <!-- <a class="btn btn-default navbar-btn"  role="button" ng-click="imprimir()">popopo</a> -->
+            </div>
+        </nav>
+        <div class="row">
+            <div id="mainTable" class="table" ng-show="servicios.length > 0">
+                <table class="table table-striped table-bordered table-condensed">
+                    <thead>
+                        <th class="no-print hidden">sel&nbsp;</th>
+                        <th>detalle&nbsp;</th>
+                        <th>arancel&nbsp;</th>
+                        <th>rec.&nbsp;</th>
+                        <th>desc.&nbsp;</th>
+                        <th>importe&nbsp;</th>
+                        <!-- <th class="no-print">selected&nbsp;</th> -->
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="data in servicios" id="fila-{{$index}}" class="no-print">
+                            <td class="no-print hidden"><input type="checkbox" ng-click="getTotalCol()" ng-model="data.seleccionado" ng-true-value="true"
+                                    ng-false-value="false"></td>
+                            <!-- <td class="edit-disabled" style="cursor: not-allowed;">{{$index + 1}}</td> -->
+                            <td>{{data.nombrealumno}} - {{data.descrip}}</td>
+                            <!-- <td ng-click="edit(data.recargo)" ng-model="data.recargo">{{data.recargo}}</td>
+                <td ng-click="edit(data.descuento)" ng-model="data.descuento">{{data.descuento}}</td> -->
+                            <td>{{data.preciounit}}</td>
+                            <td editable-td row="{{$index}}" field="recargo" >{{data.recargo * 1 | number: 2}}</td>
+                            <td editable-td row="{{$index}}" field="descuento" >{{data.descuento *1 | number: 2}}</td>
+                            <td>{{(data.preciounit * 1) + (data.recargo * 1) - (data.descuento * 1) | number: 2}}</td>
+                            <td style="display:none">{{data.seleccionado}}</td>
+                            <!-- <td style="display:none">{{data.id}}</td> -->
+                            <!-- <td class="edit-disabled no-print">{{data.selected}}</td> -->
+
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-9">
+                <div id="numeroletras">{{resultados.numtoletras}} </div>
+            </div>
+            <div>
+                <div id="importe" class="well pull-right">Total: {{resultados.totalcol | currency}}</div>
+            </div>
+        </div>
+        <div ng-show="servicios.length == 0">No se registran deudas a la fecha</div>
+    </div>
+    <div id="label-original" class="hidden text-center">ORIGINAL</div>
+    <hr id="linea-punteada-1" class="hidden linea-punteada">
+    <p class="lineaenblanco hidden" >&nbsp;</p>
+    <p class="lineaenblanco hidden">&nbsp;</p>
+    <div id="copia"></div>
+    <div id="label-copia" class="hidden text-center">COPIA</div>
+    <hr id="linea-punteada-2" class="hidden linea-punteada">
+</div>
+
+<script>
+    $(document).ready(function () {
+        var x = 0;
+        $("#btn_imprimir").addClass('disabled');
+
+        $('#mainTable').on('click', 'tr', function (event) {
+            var td = event.target.cellIndex;
+            if (td !== 3 && td !== 4 && td != undefined) {
+                if (event.target.type !== 'checkbox') {
+                    $(':checkbox', this).trigger('click');
+                    $(this).toggleClass('highlight');
+                    if ($(this).hasClass('highlight')) {
+                        x++;
+                    } else {
+                        x--;
+                    }
+                    if (x == 0) {
+                        $("#btn_imprimir").removeClass('enabled');
+                        $("#btn_imprimir").addClass('disabled');
+                    } else {
+                        if ($("#btn_imprimir").hasClass('disabled')) {
+                            $("#btn_imprimir").removeClass('disabled');
+                            $("#btn_imprimir").addClass('enabled');
+                        };
+                    }
+                }
+            }
+        });
+    })
+</script>

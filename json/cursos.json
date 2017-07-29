@@ -1,0 +1,17 @@
+[
+  {
+    "profe": "nico",
+    "role": "0",
+    "cursos": [1,4]
+  },
+  {
+    "profe": "martin",
+    "role": "1",
+    "cursos": [2,3]
+  },
+  {
+    "profe": "juan",
+    "role": "1",
+    "cursos": [5,6]
+  }
+]

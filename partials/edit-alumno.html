@@ -1,0 +1,139 @@
+﻿<style type="text/css">
+    .form-horizontal input.ng-invalid.ng-dirty {
+        border-color: #FA787E;
+    }
+
+    .form-horizontal input.ng-valid.ng-dirty {
+        border-color: #78FA89;
+    }
+
+    .error {
+        color: red;
+    }
+</style>
+<div class="view">
+    <div class="container">
+        <div class="row">
+            <header>
+                <h3>{{title}}</h3>
+            </header>
+
+            <div class="clearfix"></div>
+            <div class="col-md-12">
+
+                <form role="form" name="myForm" class="form-horizontal">
+                    <div class="row">
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Datos del Alumno</div>
+                            <div class="panel-body">
+
+                                <div class="form-group" ng-class="{error: myForm.name.$invalid}">
+                                    <label class="col-md-2"> Apellido </label>
+                                    <div class="col-md-4">
+                                        <input name="apellido" ng-model="customer.apellido" type="text" class="form-control" placeholder="Apellido" required/>
+                                        <span class="error" ng-show="myForm.apellido.$error.required">El apellido es obligatorio</span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2"> Nombre </label>
+                                    <div class="col-md-4">
+                                        <input name="nombre" ng-model="customer.nombre" type="text" class="form-control" placeholder="Nombre" required/>
+                                        <span class="error" ng-show="myForm.nombre.$error.required">El nombre es obligatorio</span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2"> DNI </label>
+                                    <div class="col-md-4">
+                                        <input name="dni" ng-model="customer.dni" type="text" class="form-control" placeholder="DNI" ng-required="{{configuracion.opciones.campos_obligatorios}}"
+                                        />
+                                        <span class="error" ng-show="myForm.dni.$error.required">El DNI es obligatorio</span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2"> Fecha Nac. </label>
+                                    <div class="col-md-4">
+                                        <input name="fecha_nac" type="date" ng-model="customer.fecha_nac" class="form-control" placeholder="Fecha de Nacimiento"
+                                            ng-required="{{configuracion.opciones.campos_obligatorios}}" />
+                                        <span class="error" ng-show="myForm.fecha_nac.$error.required">La fecha de nacimiento es obligatoria</span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-2"> Dirección </label>
+                                    <div class="col-md-4">
+                                        <input name="direccion" ng-model="customer.domicilio" type="text" class="form-control" placeholder="Dirección" ng-required="{{configuracion.opciones.campos_obligatorios}}"
+                                        />
+                                        <span class="error" ng-show="myForm.direccion.$error.required">La dirección es obligatoria</span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2"> Localidad </label>
+                                    <div class="col-md-4">
+                                        <input name="localidad" ng-model="customer.localidad" type="text" class="form-control" placeholder="Localidad" ng-required="{{configuracion.opciones.campos_obligatorios}}"
+                                        />
+                                        <span class="error" ng-show="myForm.localidad.$error.required">La localidad es obligatoria</span>
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label class="col-md-2"> Observaciones </label>
+                                    <div class="col-md-4">
+                                        <!-- <input ng-model="customer.observaciones" type= "text" class= "form-control" placeholder= "Observaciones"/> -->
+                                        <textarea name="observaciones" ng-model="customer.observaciones" id="" rows="4" class="form-control"></textarea>
+                                        <!-- <span class="error" ng-show="myForm.observaciones.$error.required">observaciones son obligatorias</span> -->
+                                    </div>
+                                </div>
+
+                                <div class="hidden">
+                                    <label class="col-md-2"> ID Curso </label>
+                                    <div class="col-md-4">
+                                        <input ng-model="customer.id_curso" type="text" class="form-control" placeholder="Curso" />
+                                    </div>
+                                </div>
+
+                                <!-- cursos -->
+                                <div class="form-group">
+                                    <label class="col-md-2"> Curso </label>
+                                    <div class="col-md-4">
+                                        <select name="curso" class="form-control" ng-model="customer.id_curso" required>
+                              <option ng-repeat="curso in cursos" value="{{curso.id}}">{{curso.nombre}}</option>
+                            </select>
+                                        <span class="error" ng-show="myForm.curso.$error.required">El curso es obligatorio.</span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-2"> Es Hermano </label>
+                                    <div class="col-md-4">
+                                        <input name="es_hermano" ng-model="customer.es_hermano" type="checkbox" ng-true-value="1" ng-false-value="0" />
+                                        <!-- <span class="error" ng-show="myForm.es_hermano.$error.required">Username is required.</span> -->
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-2">1 vez x Semana </label>
+                                    <div class="col-md-4">
+                                        <input name="una_vez_sem" ng-model="customer.una_vez_sem" type="checkbox" ng-true-value="1" ng-false-value="0" />
+                                        <!-- <span class="error" ng-show="myForm.una_vez_sem.$error.required">Username is required.</span> -->
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-2"></label>
+                            <div class="col-md-4">
+                                <a href="#/" class="btn">Cancel</a>
+                                <button ng-click="saveAlumno(customer);" ng-disabled="isClean() || myForm.$invalid" class="btn btn-primary">{{buttonText}}</button>
+                                <button ng-click="deleteAlumno(customer)" ng-show="customer._id" class="btn btn-warning">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
