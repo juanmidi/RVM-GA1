@@ -55,8 +55,8 @@ app.factory("services", ['$http', function ($http) {
         return $http.get(serviceBase + 'facturacion?fecha=' + fecha);
     };
 
-    obj.getFacturacionMensual = function (mes) {
-        return $http.get(serviceBase + 'facturacion_mensual?mes=' + mes);
+    obj.getFacturacionMensual = function (anio) {
+        return $http.get(serviceBase + 'facturacion_mensual?anio=' + anio);
     };
 
     obj.getMorosos = function (mes) {

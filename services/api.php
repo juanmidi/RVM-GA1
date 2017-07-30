@@ -634,23 +634,32 @@ private function updateRecibo(){
 			if($this->get_request_method() != "GET"){
 				$this->response('',406);
 			}
+			$meses=array("ene", "feb", "mar", "abr", "may", "jun", 
+						 "jul", "ago", "sep", "oct", "nov","dic");
+			$anio = (int)$this->_request['anio'];
+			$salida=array();
+			for ($mes=0; $mes <= 11; $mes++) { 
+				$query="SELECT Sum(servicios_r.importe) AS total
+						FROM servicios_r
+						WHERE MONTH(servicios_r.fecha) = $mes AND  YEAR(servicios_r.fecha) = $anio
+						GROUP BY  MONTH(servicios_r.fecha)";
+				
+				$r = $this->mysqli->query($query) or die($this->mysqli->error.__LINE__);
 
-			$mes = (int)$this->_request['mes'];
-
-			$query="SELECT Sum(servicios_r.importe) AS SumaDeimporte
-					FROM servicios_r
-					WHERE MONTH(servicios_r.fecha) = $mes
-					GROUP BY  MONTH(servicios_r.fecha)";
-			
-			$r = $this->mysqli->query($query) or die($this->mysqli->error.__LINE__);
-
-			if($r->num_rows > 0){
-				while($row = $r->fetch_assoc()){
-					 $result= $row;
-				}	
-				$this->response($this->json($result), 200); // send user details
+				if($r->num_rows > 0){
+					while($row = $r->fetch_assoc()){
+						$result= array("mes"=>$meses[$mes],"total"=>$row['total']);
+					}	
+				} else {
+					$result=array("mes"=>$meses[$mes],"total"=>"0");
+				}
+				$salida[]= $result;
+				$result=array();
 			}
-			$this->response('',204);	// If no records "No Content" status
+			$this->response($this->json($salida), 200); // send user details
+
+
+			//$this->response('',204);	// If no records "No Content" status
 		}
 
 

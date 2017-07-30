@@ -145,8 +145,32 @@ app.controller('facturacionCtrl', function ($scope, services, $routeParams) {
             $("#lbl-fecha").text("Año");
             $("#div-factura").addClass("hidden");
             $("#div-resumen").removeClass("hidden");
+            var a=new Date();
+            var anio=a.getFullYear();
+            console.log("vejerto "+anio);
+            $scope.facturacionMensual(anio);
         }
     }
+
+    $scope.facturacionMensual = function (anio) {
+        services.getFacturacionMensual(anio).then(function (data) {
+            $scope.resumen = data.data;
+            console.log(data.data)
+        });
+        
+        // for (var mes = 1; mes <= 12; mes++) {
+        //     services.getFacturacionMensual(mes, anio).then(function (data) {
+        //         $scope.facturacion = data.data;
+        //         console.log(data.data)
+        //     });
+        // }
+    }
+
+    angular.element(document).ready(function () {
+        $("#anio").on("change", function () {
+            $scope.facturacionMensual($(this).val());
+        })
+    })
 
     $scope.init();
 
