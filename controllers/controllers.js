@@ -128,7 +128,19 @@ app.controller('facturacionCtrl', function ($scope, services, $routeParams) {
         }
     }
 
-    $scope.resumen = function (dia) {
+    $scope.getTotalAnual = function () {
+        if ($scope.resumen != undefined) {
+            var total = 0;
+            var result = 0;
+            for (var i = 0; i < $scope.resumen.length; i++) {
+                result = $scope.resumen[i];
+                total += parseFloat(result.total);
+            }
+            return total;
+        }
+    }
+
+    $scope.verResumen = function (dia) {
         if (dia) {
             $("#datepicker").removeClass("hidden");
             $("#anio").addClass("hidden");
@@ -137,6 +149,9 @@ app.controller('facturacionCtrl', function ($scope, services, $routeParams) {
             $("#lbl-fecha").text("Fecha");
             $("#div-factura").removeClass("hidden");
             $("#div-resumen").addClass("hidden");
+            $("#total").removeClass("hidden");
+            $("#totalanual").addClass("hidden");
+            $scope.verFacturacion();
         } else {
             $("#datepicker").addClass("hidden");
             $("#anio").removeClass("hidden");
@@ -145,6 +160,8 @@ app.controller('facturacionCtrl', function ($scope, services, $routeParams) {
             $("#lbl-fecha").text("Año");
             $("#div-factura").addClass("hidden");
             $("#div-resumen").removeClass("hidden");
+            $("#total").addClass("hidden");
+            $("#totalanual").removeClass("hidden");
             var a=new Date();
             var anio=a.getFullYear();
             console.log("vejerto "+anio);

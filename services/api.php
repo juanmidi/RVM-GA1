@@ -634,8 +634,8 @@ private function updateRecibo(){
 			if($this->get_request_method() != "GET"){
 				$this->response('',406);
 			}
-			$meses=array("ene", "feb", "mar", "abr", "may", "jun", 
-						 "jul", "ago", "sep", "oct", "nov","dic");
+			$meses=array("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", 
+						 "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre","Diciembre");
 			$anio = (int)$this->_request['anio'];
 			$salida=array();
 			for ($mes=0; $mes <= 11; $mes++) { 
