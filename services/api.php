@@ -10,6 +10,11 @@
 		const DB_PASSWORD = "";
 		const DB = "escuela1_gimnasio";
 
+		// const DB_SERVER = "127.0.0.1";
+		// const DB_USER = "escuela1";
+		// const DB_PASSWORD = "eXYumn4693";
+		// const DB = "escuela1_gimnasio";
+
 		private $db = NULL;
 		private $mysqli = NULL;
 		public function __construct(){
@@ -74,7 +79,7 @@
 				$result = array();
 				while($row = $r->fetch_assoc()){
 					 $result[] = array_map('utf8_encode', $row);
-				}	
+				}
 				//echo print_r($result);
 				//echo json_encode($result);
 				$this->response($this->json($result), 200); // send user details
@@ -551,8 +556,8 @@ private function updateRecibo(){
 				$query="SELECT cursos.id AS idcurso, cursos.nombre, alumnos.id  AS idalumno , CONCAT (alumnos.apellido, ', ', alumnos.nombre) AS nombrealumno, 
 				(select presente from presentes where alumno_id = alumnos.id and fecha='$fecha') AS presente
 				FROM alumnos INNER JOIN cursos ON alumnos.id_curso = cursos.id
-				WHERE cursos.id = $id";
-
+				WHERE cursos.id = $id
+				ORDER BY nombrealumno";
 
 				$r = $this->mysqli->query($query) or die($this->mysqli->error.__LINE__);
 				
@@ -598,10 +603,11 @@ private function updateRecibo(){
        		
 			$i=0;
 			if($r->num_rows > 0){
-				$result = array();
-				while($row = $r->fetch_assoc()){
-					$row['profesores']='';
-					$result[] =array_map('utf8_encode', $row);
+			$result = array();
+			while($row = $r->fetch_assoc()){
+					$row=array_map('utf8_encode', $row);
+					$row['profesores']=array();
+					array_push($result, $row);
 				}	
 			}
 			
@@ -621,7 +627,9 @@ private function updateRecibo(){
 				$r2 = $this->mysqli->query($query) or die($this->mysqli->error.__LINE__);
 				if($r2->num_rows > 0){
 					while($row2 = $r2->fetch_assoc()){
-						$salida[$i]['profesores'][]=array_map('utf8_encode', $row2);
+						// $salida[$i]['profesores'][]=array_map('utf8_encode', $row2);
+						//$salida[$i]['profesores'][]=array_map('utf8_encode', $row2);
+						array_push($salida[$i]['profesores'],array_map('utf8_encode', $row2));
 					}
 				}
 				$i++;
@@ -638,20 +646,20 @@ private function updateRecibo(){
 						 "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre","Diciembre");
 			$anio = (int)$this->_request['anio'];
 			$salida=array();
-			for ($mes=0; $mes <= 11; $mes++) { 
-				$query="SELECT Sum(servicios_r.importe) AS total
+			for ($mes=1; $mes <= 12; $mes++) { 
+				$query="SELECT Sum(importe) AS total
 						FROM servicios_r
-						WHERE MONTH(servicios_r.fecha) = $mes AND  YEAR(servicios_r.fecha) = $anio
-						GROUP BY  MONTH(servicios_r.fecha)";
+						WHERE MONTH(fecha) = $mes AND  YEAR(fecha) = $anio AND pago=1
+						GROUP BY  MONTH(fecha)";
 				
 				$r = $this->mysqli->query($query) or die($this->mysqli->error.__LINE__);
 
 				if($r->num_rows > 0){
 					while($row = $r->fetch_assoc()){
-						$result= array("mes"=>$meses[$mes],"total"=>$row['total']);
+						$result= array("mes"=>$meses[$mes-1],"total"=>$row['total']);
 					}	
 				} else {
-					$result=array("mes"=>$meses[$mes],"total"=>"0");
+					$result=array("mes"=>$meses[$mes-1],"total"=>"0");
 				}
 				$salida[]= $result;
 				$result=array();

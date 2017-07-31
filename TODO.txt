@@ -5,22 +5,22 @@ en el server
 
 13-07-17
 pasar el campo fecha a date
-    en servicios_r
-    en alumnos
+    en servicios_r (hecho)
+    en alumnos (hecho)
 
 en usuarios
 
-cambiar id_privilegio por 'role'
+cambiar id_privilegio por 'role'  (hecho)
 
 
-agregar la tabla 'presentes'
+agregar la tabla 'presentes' (hecho)
 
 
 24/07/17
 
 en tabla ALUMNOS 
-    cambiar el campo "fecha_nac" de datetime a DATE 
+    cambiar el campo "fecha_nac" de datetime a DATE (hecho)
 
 Cursos
-    agregar clave a id
+    agregar clave a id  (hecho)
 

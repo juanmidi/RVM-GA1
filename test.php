@@ -38,7 +38,7 @@
 			
 			$i=0;
 			echo "<pre>";
-				print_r($result);
+				//print_r($result);
 				echo "<hr>";
 			foreach ($result as $key => $value) {
 				// echo "\n";
@@ -60,15 +60,17 @@
 						// $salida[$id]['profesores']=array();
 						// array_push ($salida[$id]['profesores'], $row2);
 						echo "------";
-						echo $row2['user'];
+						// echo $row2['user'];
+						echo "]]" . (string) is_string(1) . "[[<br>";
 						print_r($row2);
-						$salida[$i]['profesores'][]=array($row2);
-					}	
+						// $salida[$i]['profesores'][]=array($row2);
+						$salida[$i]['profesores'][]=array_map('utf8_encode', $row2);
+					}
 				}
 				$i++;
 			}
 			
-			 print_r($salida);
+			 //print_r($salida);
 			echo "</pre>";
 
 		}
@@ -108,8 +110,8 @@ function garcha(){
 
 
 
-garcha();
-
+// garcha();
+cursos_usuarios();
 ?>
 	
 	
