@@ -73,6 +73,11 @@ app.config(['$routeProvider',
         templateUrl: 'partials/cursos.html',
         controller: 'cursosCtrl'
       })
+      .when('/configuracion', {
+        title: 'Configuración',
+        templateUrl: 'partials/config.html',
+        controller: 'configuracionCtrl'
+      })
       .otherwise({
         redirectTo: '/'
       });

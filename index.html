@@ -30,6 +30,7 @@
   <script type="text/javascript" src="filters/filters.js"></script>
   <script type="text/javascript" src="app/functions.js"></script>
   <script type="text/javascript" src="js/numletras.js"></script>
+  <script type="text/javascript" src="js/notify.min.js"></script>
 
   <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.0/ui-bootstrap-tpls.min.js"></script> -->
   <style type="text/css">
@@ -59,9 +60,10 @@
           <li><a href="#/morosos/{{id_mes}}">Morosos</a></li>
           <li><a href="#/facturacion/{{fecha}}">Facturación</a></li>
           <li><a href="#/presentes">Presentes</a></li>
-          <li ng-show="role==1"><a href="#">Configuración</a></li>
+          <li ng-show="role==1"><a href="#/configuracion">Configuración</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
+          <li><a id="notificaciones" ng-show="logged"><span class="glyphicon glyphicon-bell"></span><span id="notification-number" class="badge badge-notify-grey">1</span></a></li>
           <li><a href="#" ng-show="logged"><span class="glyphicon glyphicon-log-out"></span> Salir</a></li>
         </ul>
       </div>
@@ -73,6 +75,7 @@
       <div ng-view="" id="ng-view"></div>
     </div>
   </div>
+
   <nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
     <div class="container">
       <div class="row">
@@ -80,7 +83,8 @@
           <a class="small" href="http://rvmweb.com/">Creado por RVM-web (2017)</a>
         </div>
         <div class="col-xs-4 text-left">
-          <span class="small">para Nico y Dani</span>
+          <a id="version" class="small">Versión 1.0.0</a>
+          <span class="small">(para Nico y Dani)</span>
         </div>
         <div class="col-xs-4 text-left">
           <span class="small" ng-show="logged">Pedido de servicio</span>

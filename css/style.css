@@ -17,8 +17,12 @@
 
 .alto-fijo-recibo{
   /*Tamaño A4  595 x 842*/
-  height: 585px;
+  /* height: 585px; */
+  /* height: 700px; */
+  height: 660px;
 }
+
+
 
 .linea-punteada {
   background-color: #fff;
@@ -37,3 +41,16 @@
   background-color: #b94a48;
 }
 
+.badge-notify-grey{
+   background:grey;
+   position:relative;
+   top: 0px;
+   left: 7px;
+}
+
+.badge-notify-red{
+   background:red;
+   position:relative;
+   top: 0px;
+   left: 7px;
+}

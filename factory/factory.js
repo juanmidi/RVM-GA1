@@ -136,6 +136,10 @@ app.factory("services", ['$http', function ($http) {
         return $http.get(serviceBase + 'presente?idalumno=' + idalumno + "&fecha=" + fecha + "&estado=" + estado + "&idcurso=" + idcurso);
     };
 
+    obj.getVersion = function () {
+        return $http.get(serviceBase + 'version');
+    };
+
     return obj;
 }]);
 

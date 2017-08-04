@@ -15,12 +15,50 @@ app.controller('loginCtrl', function ($scope, $location, LoginService) {
     };
 });
 
-app.controller('mainController', function ($scope, LoginService) {
+app.controller('mainController', function ($scope, LoginService, services) {
     var f = new Date();
-    //var fecha_f =  (f.getDate() + 1) + '-' + (f.getMonth() + 1) + '-' +  f.getFullYear();
     var fecha_f = f.getFullYear() + '-' + (f.getMonth() + 1) + '-' + (f.getDate());
-    $scope.fecha = format_fecha(fecha_f); //.toString();
+    $scope.fecha = format_fecha(fecha_f);
     $scope.id_mes = f.getMonth() + 1;
+    
+    services.getVersion().then(function (data) {
+        $scope.version = data.data.version;
+    });
+
+    angular.element(document).ready(function () {
+        $("#version").on("click", function () {
+            var texto="Versión "+$scope.version+"<br><br>";
+            texto+="Creado por <a href='http://rvmweb.com/' style='color:#F8BB86'>RVM-web</a><br>";
+            texto+="Desarrollado por Juan Monteleone y Renzo Monteleone";
+
+            swal({
+                title: "<small>Acerca de Escuela de Fútbol</small>",
+                text: texto,
+                html: true
+            });
+        })
+
+        $("#notificaciones").on("click", function(){
+            var texto="Versión "+$scope.version+"<br><br>";
+            texto+="Creado por <a href='http://rvmweb.com/' style='color:#F8BB86'>RVM-web</a><br>";
+            texto+="Desarrollado por Juan Monteleone y Renzo Monteleone";
+            
+            swal({
+                title: "<small>Notificación</small>",
+                text: texto,
+                html: true
+            });
+        })
+    })
+
+    $scope.getNotificaciones = function(){
+        $("#notification-number").html("0");
+        // $("#notification-number").removeClass("badge-notify-grey");
+        // $("#notification-number").addClass("badge-notify-red");
+    }
+
+    $scope.getNotificaciones();
+
 });
 
 app.controller('inicioCtrl', function ($scope, LoginService) {
@@ -33,7 +71,7 @@ app.controller('reciboCtrl', function ($scope, $routeParams, services, $window, 
     var mes = ($routeParams.mes) ? parseInt($routeParams.mes) : 0;
 
     var d = new Date();
-    var hora = d.getHours() + ":" + d.getMinutes();
+    var hora = d.getHours() + ":" + pad(d.getMinutes(),2);
     $scope.hora = hora;
 
     services.getRecibo(AlumnoID, mes).then(function (data) {
@@ -102,13 +140,6 @@ app.controller('facturacionCtrl', function ($scope, services, $routeParams) {
         $("#datepicker").val(fecha);
     }
 
-    angular.element(document).ready(function () {
-        $scope.verFacturacion();
-        $('#datepicker').on('change', function (ev) {
-            $scope.verFacturacion();
-        })
-    })
-
     $scope.verFacturacion = function () {
         var fecha = $("#datepicker").val();
         services.getFacturacion(fecha).then(function (data) {
@@ -174,16 +205,14 @@ app.controller('facturacionCtrl', function ($scope, services, $routeParams) {
             $scope.resumen = data.data;
             console.log(data.data)
         });
-        
-        // for (var mes = 1; mes <= 12; mes++) {
-        //     services.getFacturacionMensual(mes, anio).then(function (data) {
-        //         $scope.facturacion = data.data;
-        //         console.log(data.data)
-        //     });
-        // }
     }
 
     angular.element(document).ready(function () {
+        $scope.verResumen(true);
+        $('#datepicker').on('change', function (ev) {
+            $scope.verFacturacion();
+        })
+
         $("#anio").on("change", function () {
             $scope.facturacionMensual($(this).val());
         })
@@ -252,17 +281,23 @@ app.controller('editCtrl', function ($scope, $route, $rootScope, $location, $rou
     customer.data.fecha_nac = new Date(tmpFecha);
     var original = customer.data;
 
+    $scope.cursos = cursos.data;
     $scope.configuracion = configuracion;
     original._id = AlumnoID;
     $scope.customer = angular.copy(original);
     $scope.customer._id = AlumnoID;
-    $scope.cursos = cursos.data;
 
     $scope.generarDeuda = function (id) {
         //borra deuda anterior no paga
-        services.borrarDeudaAlumno(id).then(function (data) {});
+        services.borrarDeudaAlumno(id).then(function (data) {
+                console.log("borrar")
+                console.log(data)
+        });
         //genera nueva deuda
-        services.generarDeudaAlumno(id).then(function (data) {});
+        services.generarDeudaAlumno(id).then(function (data) {
+                console.log("Generar")
+                console.log(data) 
+        });
     }
 
     $scope.isClean = function () {
@@ -273,6 +308,11 @@ app.controller('editCtrl', function ($scope, $route, $rootScope, $location, $rou
         $location.path('/alumnos');
         if (confirm("Está seguro que quiere borrar el alumno número: " + $scope.customer._id) == true)
             services.deleteAlumno(customer.id);
+        
+        //!!!!!!!!!!!!!!!!
+        //FALTA BORRAR DEUDA NO PAGA A PARTIR DE LA FECHA DE BAJA
+        //!!!!!!!!!!!!!!!!
+
         $route.reload();
     };
 
@@ -280,12 +320,15 @@ app.controller('editCtrl', function ($scope, $route, $rootScope, $location, $rou
         $location.path('/alumnos');
         if (AlumnoID <= 0) {
             services.insertAlumno(customer).then(function (status) {
+                console.log("status.data.id -->")
+                console.log(status.data.id)
                 $scope.generarDeuda(status.data.id);
             });
             services.getAlumnos();
         } else {
-            services.updateAlumno(AlumnoID, customer);
-            $scope.generarDeuda(AlumnoID);
+            services.updateAlumno(AlumnoID, customer).then(function (status) {
+                $scope.generarDeuda(AlumnoID);
+            })
         }
         $route.reload();
     };
@@ -359,24 +402,28 @@ app.controller('cursosCtrl', function ($scope, services, configuracion) {
         console.log(id)
         swal("id usuario: " + id);
     }
-    /*
-        $scope.cursoClick = function(id){
-            $("#curso-" + id).removeClass("hidden");
-        } 
-
-        $scope.cursoLeave = function(id){
-            $("#curso-" + id).addClass("hidden");
-        } 
-
-        $scope.profeClick = function(id, idx){
-            console.log(id, idx)
-            // $("#profe-" + id).removeClass("hidden");
-            console.log($(this).text());   
-        } 
-
-        $scope.profeLeave = function(id){
-            $("#profe-" + id).addClass("hidden");
-        } 
-    */
 
 })
+
+app.controller('configuracionCtrl', function ($scope, services, configuracion) {
+    services.getAlumnos().then(function(data){
+        $scope.alumnos=data.data;
+        
+    })
+
+    $scope.generarDeudaAnual = function () {
+        var id;
+        for(x in $scope.alumnos){
+            id=$scope.alumnos[x].id;
+
+            services.generarDeudaAlumno(id).then(function (data) {
+                console.log(data.data)
+            })
+        }
+    }
+    
+    // services.generarDeudaAnual().then(function (data) {
+    //     console.log(data.data)
+    // })
+})
+

@@ -1,15 +1,24 @@
-@media print
-{    
-  .no-print, .no-print *
-  {
+@media print{    
+  .no-print, .no-print * {
       display: none !important;
   }
-  @page { margin: 0; }
-  body { margin: 1.6cm; }
-  
-  /*
-  td, #gimnasio, #numeroletras, #importe, #numero, #recibo, #fecha, #hora {
-    font-size: 140% !important;
+  @page { 
+      margin: 0; 
   }
-   */
+  body { 
+    margin: 1.6cm; 
+  }
+    #encabezado-tabla, #numero, #fecha, #hora, #numeroletras, #importe {
+    font-size: 160% !important;
+  }
+  
+  #mainTable td{
+    font-size: 160%;
+  }
+
+
+
+  #titulo {
+    font-size: 200% !important;
+  }
 }

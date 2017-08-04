@@ -8,12 +8,13 @@
 		const DB_SERVER = "127.0.0.1";
 		const DB_USER = "root";
 		const DB_PASSWORD = "";
-		const DB = "escuela1_gimnasio";
+		// const DB = "escuela1_gimnasio";
+		const DB = "popo";
 
 		// const DB_SERVER = "127.0.0.1";
 		// const DB_USER = "escuela1";
 		// const DB_PASSWORD = "eXYumn4693";
-		// const DB = "escuela1_gimnasio";
+		// const DB = "escuela1_desarrollo";
 
 		private $db = NULL;
 		private $mysqli = NULL;
@@ -437,15 +438,24 @@ private function generarDeudaAlumno(){
 			$anio=date('Y');
 			$preciounit=$result[0]['inscripcion'];
 			$importe=$preciounit;
-			$sql = "INSERT INTO servicios_r (cantidad, id_concepto, descrip, id_mes, anio, id_alumno, preciounit, recargo, descuento, importe, pago) 
-								SELECT 1, $id_concepto, '$descrip', $mes, '$anio', $id, $preciounit, 0, 0, $importe,0
-								WHERE NOT EXISTS (SELECT 1 FROM servicios_r 
-																		WHERE id_concepto=$id_concepto AND
-																				id_mes=$mes AND
-																				anio='$anio' AND
-																				id_alumno=$id AND
-																				importe=$importe)";
 			
+			$sql = "INSERT INTO servicios_r (cantidad, id_concepto, descrip, id_mes, anio, id_alumno, preciounit, recargo, descuento, importe, pago) 
+						SELECT 1, $id_concepto, '$descrip', $mes, '$anio', $id, $preciounit, 0, 0, $importe,0
+						FROM dual
+						WHERE NOT EXISTS (
+							SELECT * FROM servicios_r 
+							WHERE id_concepto=$id_concepto AND
+								id_mes=$mes AND
+								anio='$anio' AND
+								id_alumno=$id AND
+								importe=$importe)";
+
+			// $sql = "INSERT INTO servicios_r (cantidad, id_concepto, descrip, id_mes, anio, id_alumno, preciounit, recargo, descuento, importe, pago) 
+			// 					VALUES (1, $id_concepto, '$descrip', $mes, '$anio', $id, $preciounit, 0, 0, $importe,0)";
+								
+
+
+
 			$r = $this->mysqli->query($sql) or die($this->mysqli->error.__LINE__);
 
 			//concepto *** CUOTA ***
@@ -469,13 +479,20 @@ private function generarDeudaAlumno(){
 				$mes_anio=date_format($fecha_tmp,"M/Y");
 				$descrip="Fútbol (" . $mes_anio . ") - Curso: " .$result2[0]['curso'];
 				$descrip=utf8_decode($descrip);
+				
 				$sql = "INSERT INTO servicios_r (cantidad, id_concepto, descrip, id_mes, anio, id_alumno, preciounit, recargo, descuento, importe, pago) 
-								SELECT 1, $id_concepto, '$descrip', $mes, '$anio', $id, $preciounit, 0, $descuento, $importe,0
-								WHERE NOT EXISTS (SELECT 1 FROM servicios_r 
-																		WHERE id_concepto=$id_concepto AND
-																				id_mes=$mes AND
-																				anio='$anio' AND
-																				id_alumno=$id)";
+							SELECT 1, $id_concepto, '$descrip', $mes, '$anio', $id, $preciounit, 0, $descuento, $importe,0
+							FROM dual
+							WHERE NOT EXISTS (
+								SELECT * FROM servicios_r 
+								WHERE id_concepto=$id_concepto AND
+									id_mes=$mes AND
+									anio='$anio' AND
+									id_alumno=$id)";
+
+				// $sql = "INSERT INTO servicios_r (cantidad, id_concepto, descrip, id_mes, anio, id_alumno, preciounit, recargo, descuento, importe, pago) 
+				// 				VALUES (1, $id_concepto, '$descrip', $mes, '$anio', $id, $preciounit, 0, $descuento, $importe,0)";
+
 				$r = $this->mysqli->query($sql) or die($this->mysqli->error.__LINE__);
 			}
 		}
@@ -485,8 +502,9 @@ private function borrarDeudaAlumno(){
 				$this->response('',406);
 			}
 			$idAlumno = (int)$this->_request['id'];
+			$anio=date("Y");
 			if($idAlumno > 0){				
-				$query="DELETE FROM servicios_r WHERE id_alumno = $idAlumno AND pago=0";
+				$query="DELETE FROM servicios_r WHERE id_alumno = $idAlumno AND anio='$anio' AND pago=0";
 				$r = $this->mysqli->query($query) or die($this->mysqli->error.__LINE__);
 				$success = array('status' => "Success", "msg" => "Registros borrados correctamente.");
 				$this->response($this->json($success),200);
@@ -669,6 +687,29 @@ private function updateRecibo(){
 
 			//$this->response('',204);	// If no records "No Content" status
 		}
+
+
+
+	private function version(){	
+			if($this->get_request_method() != "GET"){
+				$this->response('',406);
+			}
+				$query="SELECT version FROM sistema";
+				
+				$r = $this->mysqli->query($query) or die($this->mysqli->error.__LINE__);
+
+				if($r->num_rows > 0){
+					while($row = $r->fetch_assoc()){
+						$result= $row;
+					}
+				} else {
+					$result="";
+				}
+			$this->response($this->json($result), 200);
+		}
+
+
+
 
 
 		/*

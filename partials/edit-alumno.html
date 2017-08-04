@@ -86,20 +86,27 @@
                                     </div>
                                 </div>
 
-                                <div class="hidden">
+                                <!-- cursos ID -->
+                                <!-- <div >
                                     <label class="col-md-2"> ID Curso </label>
                                     <div class="col-md-4">
-                                        <input ng-model="customer.id_curso" type="text" class="form-control" placeholder="Curso" />
+                                        <input id="idcurso" ng-model="customer.id_curso" type="text" class="form-control" placeholder="Curso" />
                                     </div>
-                                </div>
+                                </div> -->
 
                                 <!-- cursos -->
                                 <div class="form-group">
                                     <label class="col-md-2"> Curso </label>
                                     <div class="col-md-4">
-                                        <select name="curso" class="form-control" ng-model="customer.id_curso" required>
-                              <option ng-repeat="curso in cursos" value="{{curso.id}}">{{curso.nombre}}</option>
-                            </select>
+                                        <!-- no funciona con ng-model -->
+                                        <!-- <select name="curso" class="form-control" ng-model="customer.id_curso" required>
+                                            <option ng-repeat="curso in cursos" value="{{curso.id}}">{{curso.nombre}}</option>
+                                        </select>  -->
+                                        
+                                        <select ng-options="c.id as c.nombre for c in cursos" name="curso" class="form-control" ng-model="customer.id_curso" required>
+                                        </select> 
+
+
                                         <span class="error" ng-show="myForm.curso.$error.required">El curso es obligatorio.</span>
                                     </div>
                                 </div>
@@ -107,7 +114,7 @@
                                 <div class="form-group">
                                     <label class="col-md-2"> Es Hermano </label>
                                     <div class="col-md-4">
-                                        <input name="es_hermano" ng-model="customer.es_hermano" type="checkbox" ng-true-value="1" ng-false-value="0" />
+                                        <input name="es_hermano" ng-model="customer.es_hermano" type="checkbox" ng-true-value="'1'" ng-false-value="'0'" />
                                         <!-- <span class="error" ng-show="myForm.es_hermano.$error.required">Username is required.</span> -->
                                     </div>
                                 </div>
@@ -115,7 +122,7 @@
                                 <div class="form-group">
                                     <label class="col-md-2">1 vez x Semana </label>
                                     <div class="col-md-4">
-                                        <input name="una_vez_sem" ng-model="customer.una_vez_sem" type="checkbox" ng-true-value="1" ng-false-value="0" />
+                                        <input name="una_vez_sem" ng-model="customer.una_vez_sem" type="checkbox" ng-true-value="'1'" ng-false-value="'0'" />
                                         <!-- <span class="error" ng-show="myForm.una_vez_sem.$error.required">Username is required.</span> -->
                                     </div>
                                 </div>
