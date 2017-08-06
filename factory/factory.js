@@ -66,6 +66,11 @@ app.factory("services", ['$http', function ($http) {
     obj.getCursos = function () {
         return $http.get(serviceBase + 'cursos');
     };
+
+    obj.getProfeCursos = function (userid) {
+        return $http.get(serviceBase + 'profe_cursos?userid=' + userid);
+    };
+
 /////////////////////////////////////
     obj.getCursosUsuarios = function () {
         return $http.get(serviceBase + 'cursos_usuarios');
@@ -146,7 +151,7 @@ app.factory("services", ['$http', function ($http) {
 
 app.factory('LoginService', function ($rootScope, services, $http) {
     var isAuthenticated = false,
-        role = '';
+        role = '', id='', nombre='';
 
     return {
         login: function (username, password) {
@@ -157,7 +162,9 @@ app.factory('LoginService', function ($rootScope, services, $http) {
             }).then(function (results) {
                 isAuthenticated = username === results.data.user && password === results.data.pass;
                 role = results.data.role;
-                return role; //isAuthenticated;
+                id = results.data.id;
+                nombre = results.data.nombre;
+                return role;
             });
         },
         isAuthenticated: function () {
@@ -167,6 +174,17 @@ app.factory('LoginService', function ($rootScope, services, $http) {
         role: function () {
             $rootScope.role = role;
             return role;
+        },
+        id: function () {
+            $rootScope.id = id;
+            return id;
+        },
+        nombre: function () {
+            $rootScope.nombre = nombre;
+            return nombre;
+        },
+        logout: function () { 
+            isAuthenticated=false;
         }
     };
 });

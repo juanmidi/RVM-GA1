@@ -37,9 +37,12 @@
         <div class="form-group">
             <div class="col-sm-4">
                 <label> Curso </label>
-                <select id="curso" class="form-control">
-                    <option ng-repeat="curso in cursos" value="{{curso.id}}">{{curso.nombre}}</option>
-                </select>
+                   <select id="curso" ng-model="curso" class="form-control" ng-options="c.id as c.nombre for c in cursos">  
+                       <option value="">-- seleccione--</option>
+                    </select> 
+                   <!-- <select id="curso" class="form-control">  
+                      <option ng-repeat="curso in cursos" value="{{curso.id}}">{{curso.nombre}}</option>  
+                </select>  -->
             </div>
         </div>
         <div class="form-group">

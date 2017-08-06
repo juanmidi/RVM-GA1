@@ -20,6 +20,7 @@ app.controller('mainController', function ($scope, LoginService, services) {
     var fecha_f = f.getFullYear() + '-' + (f.getMonth() + 1) + '-' + (f.getDate());
     $scope.fecha = format_fecha(fecha_f);
     $scope.id_mes = f.getMonth() + 1;
+
     
     services.getVersion().then(function (data) {
         $scope.version = data.data.version;
@@ -39,12 +40,10 @@ app.controller('mainController', function ($scope, LoginService, services) {
         })
 
         $("#notificaciones").on("click", function(){
-            var texto="Versión "+$scope.version+"<br><br>";
-            texto+="Creado por <a href='http://rvmweb.com/' style='color:#F8BB86'>RVM-web</a><br>";
-            texto+="Desarrollado por Juan Monteleone y Renzo Monteleone";
+            var texto="Estás al día";
             
             swal({
-                title: "<small>Notificación</small>",
+                title: "<small>Notificaciones</small>",
                 text: texto,
                 html: true
             });
@@ -59,10 +58,16 @@ app.controller('mainController', function ($scope, LoginService, services) {
 
     $scope.getNotificaciones();
 
+    $scope.logout = function(){
+        LoginService.logout();
+        location.reload();
+    }
+
 });
 
 app.controller('inicioCtrl', function ($scope, LoginService) {
     $scope.role = LoginService.role();
+    $scope.nombre = LoginService.nombre();
 
 });
 
@@ -334,8 +339,21 @@ app.controller('editCtrl', function ($scope, $route, $rootScope, $location, $rou
     };
 });
 
-app.controller('tomarListaCtrl', function ($scope, $timeout, services, cursos, configuracion) {
-    $scope.cursos = cursos.data;
+app.controller('tomarListaCtrl', function ($scope, $timeout, services, LoginService, configuracion) {
+    //$scope.cursos = cursos.data;
+
+    var userid=LoginService.id();
+    var role=LoginService.role();
+
+    if(role==3){
+        services.getProfeCursos(userid).then(function (data) {
+            $scope.cursos = data.data;
+        })
+    } else {
+        services.getCursos().then(function (data) {
+            $scope.cursos = data.data;
+        })
+    }
 
     $scope.init = function () {
         //carga la fecha actual en el controlador
@@ -343,20 +361,18 @@ app.controller('tomarListaCtrl', function ($scope, $timeout, services, cursos, c
         $("#datepicker").val(fecha);
     }
 
-    $scope.init();
-
     angular.element(document).ready(function () {
-        $scope.pasarLista();
         $("#curso").on("change", function () {
             $scope.pasarLista();
         })
+
         $("#datepicker").on("change", function () {
             $scope.pasarLista();
         })
     })
 
     $scope.pasarLista = function () {
-        var curso = $("#curso").val();
+        var curso = $scope.curso;
         var fecha = $("#datepicker").val();
         services.getPasarLista(curso, fecha).then(function (data) {
             $scope.listado = data.data;
@@ -382,13 +398,14 @@ app.controller('tomarListaCtrl', function ($scope, $timeout, services, cursos, c
     }
 
     $scope.actualizar = function (id, check) {
-        console.log(id, check)
         var curso = $("#curso").val();
         var fecha = $("#datepicker").val();
         services.getPresente(id, fecha, check, curso).then(function (data) {
             $scope.totalPresentes();
         });
     }
+    
+    $scope.init(); 
 
 })
 
@@ -402,6 +419,10 @@ app.controller('cursosCtrl', function ($scope, services, configuracion) {
         console.log(id)
         swal("id usuario: " + id);
     }
+
+})
+
+app.controller('perfilCtrl', function ($scope, services, configuracion) {
 
 })
 

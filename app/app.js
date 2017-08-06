@@ -61,12 +61,12 @@ app.config(['$routeProvider',
       .when('/presentes', {
         title: 'Presentes',
         templateUrl: 'partials/presentes.html',
-        controller: 'tomarListaCtrl',
-        resolve: {
-          cursos: function(services){
-            return services.getCursos();  
-          }
-        }
+        controller: 'tomarListaCtrl'
+      })
+      .when('/perfil', {
+        title: 'Perfil',
+        templateUrl: 'partials/profile.html',
+        controller: 'perfilCtrl'
       })
       .when('/cursos', {
         title: 'Cursos',

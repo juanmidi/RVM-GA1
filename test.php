@@ -108,10 +108,33 @@ function garcha(){
 			//$this->response('',204);	// If no records "No Content" status
 		}
 
+		function profe_cursos(){	
+			$mysqli = new mysqli(DB_SERVER,DB_USER,DB_PASSWORD,DB);
 
+			$userid = 1;
+
+			$query="SELECT c.id as id, c.nombre FROM cursos c
+						INNER JOIN usuarios_cursos uc
+						ON uc.id_curso = c.id 
+					WHERE  uc.id_usuario = 1";
+
+			$r = $mysqli->query($query) or die($mysqli->error.__LINE__);
+
+			if($r->num_rows > 0){
+				$result = array();
+				while($row = $r->fetch_assoc()){
+					//$result[] = $row;
+					 $result[] = array_map('utf8_encode', $row);
+				}	
+				echo "<pre>";
+				print_r($result);
+				echo "</pre>";
+			}
+		}
 
 // garcha();
-cursos_usuarios();
+// cursos_usuarios();
+profe_cursos();
 ?>
 	
 	

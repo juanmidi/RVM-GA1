@@ -4,25 +4,34 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
   <!-- favicon -->
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
   <link rel="icon" href="/favicon.ico" type="image/x-icon">
+
   <!-- CSS     -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="css/print.css">
   <link rel="stylesheet" type="text/css" href="css/style.css">
   <link rel="stylesheet" type="text/css" href="css/login.css">
   <link rel="stylesheet" type="text/css" href="css/sweetalert.css">
-  <!-- <link rel="stylesheet" type="text/css" href="css/datepicker.css"> -->
+
   <!-- JS -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <!-- <script src="js/angular.min.js"></script> -->
-  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.2/angular.min.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-route.js"></script>
-  <script src="js/sweetalert.min.js"></script>
-  <!-- <script src="js/ui-bootstrap-tpls-2.5.0.min.js"></script> -->
-  <!-- <script type="text/javascript" src="js/bootstrap-datepicker.js"></script> -->
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script> -->
+	<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+  
+
+  <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
+  <script type="text/javascript" src="js/bootstrap.min.js"></script>
+  
+  <!-- <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.2/angular.min.js"></script> -->
+  <script type="text/javascript" src="js/angular.min.js"></script>
+  
+  <!-- <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-route.js"></script> -->
+	<script type="text/javascript" src="js/angular-route.min.js"></script>
+
+  <script type="text/javascript" src="js/sweetalert.min.js"></script>
   <script type="text/javascript" src="app/app.js"></script>
   <script type="text/javascript" src="factory/factory.js"></script>
   <script type="text/javascript" src="directives/directives.js"></script>
@@ -55,16 +64,21 @@
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul ng-show="logged" class="nav navbar-nav">
-          <li><a href="#/alumnos">Alumnos</span></a></li>
-          <li><a href="#/cursos">Cursos</a></li>
-          <li><a href="#/morosos/{{id_mes}}">Morosos</a></li>
-          <li><a href="#/facturacion/{{fecha}}">Facturación</a></li>
+          <li ng-show="role==1"><a href="#/alumnos">Alumnos</span></a></li>
+          <li ng-show="role==1"><a href="#/cursos">Cursos</a></li>
+          <li ng-show="role==1"><a href="#/morosos/{{id_mes}}">Morosos</a></li>
+          <li ng-show="role==1"><a href="#/facturacion/{{fecha}}">Facturación</a></li>
           <li><a href="#/presentes">Presentes</a></li>
           <li ng-show="role==1"><a href="#/configuracion">Configuración</a></li>
         </ul>
-        <ul class="nav navbar-nav navbar-right">
-          <li><a id="notificaciones" ng-show="logged"><span class="glyphicon glyphicon-bell"></span><span id="notification-number" class="badge badge-notify-grey">1</span></a></li>
-          <li><a href="#" ng-show="logged"><span class="glyphicon glyphicon-log-out"></span> Salir</a></li>
+        <ul ng-show="logged" class="nav navbar-nav navbar-right">
+            <li><a id="notificaciones"><span class="glyphicon glyphicon-bell"></span><span id="notification-number" class="badge badge-notify-grey">1</span></a></li>
+            <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" title="usuario: {{nombre}}"><i class="glyphicon glyphicon-user"></i><b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="#/perfil"><i class="icon-cog"></i> Mi Perfil</a></li>
+                <li><a href="#" ng-click="logout()"><span class="glyphicon glyphicon-log-out"></span> Salir</a></li> 
+              </ul>
+            </li>
         </ul>
       </div>
     </div>
@@ -94,7 +108,7 @@
   </nav>
 </body>
 <script>
-  $('.navbar-nav>li>a').on('click', function(){
+  $('.navbar-nav>li>a').not( ".dropdown-toggle").on('click', function(){
       $('.navbar-collapse').collapse('hide');
   });
 </script>
