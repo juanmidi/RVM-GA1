@@ -360,6 +360,27 @@ private function updateMoroso(){
 			$this->response('',204);	// If no records "No Content" status
 		}
 
+		private function profes(){	
+			if($this->get_request_method() != "GET"){
+				$this->response('',406);
+			}
+
+			$query="SELECT CONCAT(nombre,' ',apellido) AS nombreprofe FROM usuarios";
+
+			$r = $this->mysqli->query($query) or die($this->mysqli->error.__LINE__);
+
+			if($r->num_rows > 0){
+				$result = array();
+				while($row = $r->fetch_assoc()){
+					//$result[] = $row;
+					 $result[] = array_map('utf8_encode', $row);
+				}	
+				$this->response($this->json($result), 200);
+			}
+			$this->response('',204);	// If no records "No Content" status
+		}
+
+
 		//NO USADO*****************************************************
 		private function familias(){	
 			if($this->get_request_method() != "GET"){

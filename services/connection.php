@@ -4,5 +4,5 @@
     const DB_PASSWORD = "";
     // const DB = "escuela1_gimnasio";
     // const DB = "escuela1_desarrollo";
-    const DB = "popo";
+    const DB = "escuela1_desarrollo";
 ?>

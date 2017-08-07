@@ -76,6 +76,10 @@ app.factory("services", ['$http', function ($http) {
         return $http.get(serviceBase + 'cursos_usuarios');
     };
 
+    obj.getProfes = function () {
+        return $http.get(serviceBase + 'profes');
+    };
+
     obj.getCursosUpdate = function () {
         // return $http.get(serviceBase + 'XXXXXXXXXXXXX');
     };

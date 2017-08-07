@@ -250,7 +250,6 @@ app.controller('morososCtrl', function ($scope, services, $routeParams, $locatio
                     // $(this).find('td').eq(columnaId).text()
                 }
             })
-
             services.updateMoroso(ids, fechas);
         }
     }
@@ -412,6 +411,12 @@ app.controller('tomarListaCtrl', function ($scope, $timeout, services, LoginServ
 app.controller('cursosCtrl', function ($scope, services, configuracion) {
     services.getCursosUsuarios().then(function (data) {
         $scope.cursos = data.data;
+        console.log(data.data)
+    })
+
+    services.getProfes().then(function (data) {
+        $scope.profes = data.data;
+        console.log("profes")
         console.log(data.data)
     })
 

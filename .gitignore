@@ -1,0 +1,12 @@
+# sublimetext
+/*.sublime-project
+*.sublime-workspace
+
+# -- Sistemas Operativos ------------------------------
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+ 
