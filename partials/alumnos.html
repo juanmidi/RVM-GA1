@@ -26,9 +26,9 @@
                     <th>Acciones&nbsp;</th>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="data in alumnos | filter: alumno">
+                    <tr ng-repeat="data in alumnos | filter: alumno" repeat-end="onEnd()">
                         <td>{{data.alumno}}</td>
-                        <td><a href="#/edit-alumno/{{data.id}}" class="btn">&nbsp;<i class="glyphicon glyphicon-edit"></i>&nbsp; Editar</a>
+                        <td><a href="#/edit-alumno/{{data.id}}" class="btn" id="id{{data.id}}">&nbsp;<i class="glyphicon glyphicon-edit"></i>&nbsp; Editar</a>
                             <a href="#/recibo/{{data.id}}/mes/{{mesActual}}" class="btn">&nbsp;<i class="glyphicon glyphicon-list-alt"></i>&nbsp; Recibo</a>
                         </td>
                     </tr>

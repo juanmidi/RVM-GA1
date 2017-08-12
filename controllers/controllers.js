@@ -20,17 +20,17 @@ app.controller('mainController', function ($scope, LoginService, services) {
     var fecha_f = f.getFullYear() + '-' + (f.getMonth() + 1) + '-' + (f.getDate());
     $scope.fecha = format_fecha(fecha_f);
     $scope.id_mes = f.getMonth() + 1;
+    //alumnoId.picho("");
 
-    
     services.getVersion().then(function (data) {
         $scope.version = data.data.version;
     });
 
     angular.element(document).ready(function () {
         $("#version").on("click", function () {
-            var texto="Versión "+$scope.version+"<br><br>";
-            texto+="Creado por <a href='http://rvmweb.com/' style='color:#F8BB86'>RVM-web</a><br>";
-            texto+="Desarrollado por Juan Monteleone y Renzo Monteleone";
+            var texto = "Versión " + $scope.version + "<br><br>";
+            texto += "Creado por <a href='http://rvmweb.com/' style='color:#F8BB86'>RVM-web</a><br>";
+            texto += "Desarrollado por Juan Monteleone y Renzo Monteleone";
 
             swal({
                 title: "<small>Acerca de Escuela de Fútbol</small>",
@@ -39,9 +39,9 @@ app.controller('mainController', function ($scope, LoginService, services) {
             });
         })
 
-        $("#notificaciones").on("click", function(){
-            var texto="Estás al día";
-            
+        $("#notificaciones").on("click", function () {
+            var texto = "Estás al día";
+
             swal({
                 title: "<small>Notificaciones</small>",
                 text: texto,
@@ -50,7 +50,7 @@ app.controller('mainController', function ($scope, LoginService, services) {
         })
     })
 
-    $scope.getNotificaciones = function(){
+    $scope.getNotificaciones = function () {
         $("#notification-number").html("0");
         // $("#notification-number").removeClass("badge-notify-grey");
         // $("#notification-number").addClass("badge-notify-red");
@@ -58,7 +58,7 @@ app.controller('mainController', function ($scope, LoginService, services) {
 
     $scope.getNotificaciones();
 
-    $scope.logout = function(){
+    $scope.logout = function () {
         LoginService.logout();
         location.reload();
     }
@@ -76,7 +76,7 @@ app.controller('reciboCtrl', function ($scope, $routeParams, services, $window, 
     var mes = ($routeParams.mes) ? parseInt($routeParams.mes) : 0;
 
     var d = new Date();
-    var hora = d.getHours() + ":" + pad(d.getMinutes(),2);
+    var hora = d.getHours() + ":" + pad(d.getMinutes(), 2);
     $scope.hora = hora;
 
     services.getRecibo(AlumnoID, mes).then(function (data) {
@@ -136,6 +136,8 @@ app.controller('reciboCtrl', function ($scope, $routeParams, services, $window, 
 })
 
 app.controller('facturacionCtrl', function ($scope, services, $routeParams) {
+    //borra la posición de alumno
+    localStorage.setItem("idAlumno", undefined);
 
     var suma = 0;
 
@@ -198,9 +200,9 @@ app.controller('facturacionCtrl', function ($scope, services, $routeParams) {
             $("#div-resumen").removeClass("hidden");
             $("#total").addClass("hidden");
             $("#totalanual").removeClass("hidden");
-            var a=new Date();
-            var anio=a.getFullYear();
-            console.log("vejerto "+anio);
+            var a = new Date();
+            var anio = a.getFullYear();
+            console.log("vejerto " + anio);
             $scope.facturacionMensual(anio);
         }
     }
@@ -228,6 +230,9 @@ app.controller('facturacionCtrl', function ($scope, services, $routeParams) {
 });
 
 app.controller('morososCtrl', function ($scope, services, $routeParams, $location) {
+    //borra la posición de alumno
+    localStorage.setItem("idAlumno", undefined);
+
     var mes = $routeParams.mes;
     services.getMorosos(mes).then(function (data) {
         $scope.morosos = data.data;
@@ -247,7 +252,6 @@ app.controller('morososCtrl', function ($scope, services, $routeParams, $locatio
                     ids.push(id);
                     fechas.push(fecha);
                     $("#fila-" + id).hide(1000);
-                    // $(this).find('td').eq(columnaId).text()
                 }
             })
             services.updateMoroso(ids, fechas);
@@ -266,10 +270,23 @@ app.controller('morososCtrl', function ($scope, services, $routeParams, $locatio
     }
 });
 
-app.controller('listCtrl', function ($scope, services) {
+app.controller('listCtrl', function ($scope, services, $timeout) {
     services.getAlumnos().then(function (data) {
         $scope.alumnos = data.data;
-    });
+        $scope.init();
+    })
+
+    $scope.init = function(){
+        $timeout(function () {
+            var po = localStorage.getItem("idAlumno");
+            if ( po === null || po === "" || po === "undefined"){
+                var p=1;
+            }else{
+                po = (po == "") ? "#top" : "#id" + po;
+                $(document).scrollTop($(po).offset().top);
+            }
+        }, 1)
+    }
 
     var f = new Date();
     $scope.mesActual = f.getMonth() + 1;
@@ -291,16 +308,20 @@ app.controller('editCtrl', function ($scope, $route, $rootScope, $location, $rou
     $scope.customer = angular.copy(original);
     $scope.customer._id = AlumnoID;
 
+    $(document).scrollTop($("#top").offset().top);
+
+    localStorage.setItem("idAlumno", AlumnoID);
+
     $scope.generarDeuda = function (id) {
         //borra deuda anterior no paga
         services.borrarDeudaAlumno(id).then(function (data) {
-                console.log("borrar")
-                console.log(data)
+            console.log("borrar")
+            console.log(data)
         });
         //genera nueva deuda
         services.generarDeudaAlumno(id).then(function (data) {
-                console.log("Generar")
-                console.log(data) 
+            console.log("Generar")
+            console.log(data)
         });
     }
 
@@ -308,16 +329,36 @@ app.controller('editCtrl', function ($scope, $route, $rootScope, $location, $rou
         return angular.equals(original, $scope.customer);
     }
 
-    $scope.deleteAlumno = function (customer) {
+    $scope.darDeBajaAlumno = function (customer) {
+        var nombre= $("#apellido").val();
+        console.log(nombre)
         $location.path('/alumnos');
-        if (confirm("Está seguro que quiere borrar el alumno número: " + $scope.customer._id) == true)
-            services.deleteAlumno(customer.id);
-        
+        if (confirm("Está seguro que quiere dar de baja al alumno número: " + nombre + " " + $scope.customer._id) == true)
+            services.darDeBajaAlumno(customer.id);
+
         //!!!!!!!!!!!!!!!!
         //FALTA BORRAR DEUDA NO PAGA A PARTIR DE LA FECHA DE BAJA
         //!!!!!!!!!!!!!!!!
 
         $route.reload();
+    }
+
+    $scope.deleteAlumno = function (customer) {
+        /*
+        ###
+            desactivado hasta armar darDeBaja
+        ###
+        */
+
+        // $location.path('/alumnos');
+        // if (confirm("Está seguro que quiere borrar el alumno número: " + $scope.customer._id) == true)
+        //     services.deleteAlumno(customer.id);
+
+        // //!!!!!!!!!!!!!!!!
+        // //FALTA BORRAR DEUDA NO PAGA A PARTIR DE LA FECHA DE BAJA
+        // //!!!!!!!!!!!!!!!!
+
+        // $route.reload();
     };
 
     $scope.saveAlumno = function (customer) {
@@ -336,15 +377,17 @@ app.controller('editCtrl', function ($scope, $route, $rootScope, $location, $rou
         }
         $route.reload();
     };
+
 });
 
 app.controller('tomarListaCtrl', function ($scope, $timeout, services, LoginService, configuracion) {
-    //$scope.cursos = cursos.data;
+    //borra la posición de alumno
+    localStorage.setItem("idAlumno", undefined);
 
-    var userid=LoginService.id();
-    var role=LoginService.role();
+    var userid = LoginService.id();
+    var role = LoginService.role();
 
-    if(role==3){
+    if (role == 3) {
         services.getProfeCursos(userid).then(function (data) {
             $scope.cursos = data.data;
         })
@@ -403,12 +446,15 @@ app.controller('tomarListaCtrl', function ($scope, $timeout, services, LoginServ
             $scope.totalPresentes();
         });
     }
-    
-    $scope.init(); 
+
+    $scope.init();
 
 })
 
 app.controller('cursosCtrl', function ($scope, services, configuracion) {
+    //borra la posición de alumno
+    localStorage.setItem("idAlumno", undefined);
+
     services.getCursosUsuarios().then(function (data) {
         $scope.cursos = data.data;
         console.log(data.data)
@@ -432,24 +478,26 @@ app.controller('perfilCtrl', function ($scope, services, configuracion) {
 })
 
 app.controller('configuracionCtrl', function ($scope, services, configuracion) {
-    services.getAlumnos().then(function(data){
-        $scope.alumnos=data.data;
-        
+    //borra la posición de alumno
+    localStorage.setItem("idAlumno", undefined);
+    
+    services.getAlumnos().then(function (data) {
+        $scope.alumnos = data.data;
+
     })
 
     $scope.generarDeudaAnual = function () {
         var id;
-        for(x in $scope.alumnos){
-            id=$scope.alumnos[x].id;
+        for (x in $scope.alumnos) {
+            id = $scope.alumnos[x].id;
 
             services.generarDeudaAlumno(id).then(function (data) {
                 console.log(data.data)
             })
         }
     }
-    
+
     // services.generarDeudaAnual().then(function (data) {
     //     console.log(data.data)
     // })
 })
-

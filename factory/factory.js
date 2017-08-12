@@ -32,6 +32,12 @@ app.factory("services", ['$http', function ($http) {
     };
 
     obj.deleteAlumno = function (id) {
+        return $http.get(serviceBase + 'darDeBajaAlumno?id=' + id).then(function (status) {
+            return status.data;
+        });
+    };
+
+    obj.darDeBajaAlumno = function (id) {
         return $http.delete(serviceBase + 'deleteAlumno?id=' + id).then(function (status) {
             return status.data;
         });
@@ -149,9 +155,29 @@ app.factory("services", ['$http', function ($http) {
         return $http.get(serviceBase + 'version');
     };
 
+    obj.getCurrentId = function (id) {
+        return id;
+    };
+
     return obj;
 }]);
 
+
+/*
+app.factory('alumnoId', function ($rootScope) {
+    var idToScroll='';
+    return {
+        getIdAlumno: function(){
+            return idToScroll;
+        },
+        setIdAlumno: function(val){
+            idToScroll = val;
+            $rootScope.idToScroll = idToScroll;
+            return idToScroll;
+        }
+    }
+})
+*/
 
 app.factory('LoginService', function ($rootScope, services, $http) {
     var isAuthenticated = false,

@@ -1,0 +1,5 @@
+Ver 1.0 rev 6
+
+Agregado de botón "dar de baja"
+scroll top al terminar de editar alumno para que no vuelva al principio de la lista
+scroll top en edición de alumno

@@ -194,7 +194,20 @@
 			}else
 				$this->response('',204);	// If no records "No Content" status
 		}
-		
+
+		private function darDeBajaAlumno(){
+			if($this->get_request_method() != "GET"){
+				$this->response('',406);
+			}
+			$id = (int)$this->_request['id'];
+			if($id > 0){				
+				$query="UPDATE alumnos SET baja=1 WHERE id=$id";
+				$r = $this->mysqli->query($query) or die($this->mysqli->error.__LINE__);
+				$success = array('status' => "Success", "msg" => "Se actualizó el registro.");
+				$this->response($this->json($success),200);
+			}else
+				$this->response('',204);
+		}	
 
 		private function recibo(){	
 			if($this->get_request_method() != "GET"){
