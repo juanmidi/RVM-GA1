@@ -771,9 +771,38 @@ private function updateRecibo(){
 			$this->response($this->json($result), 200);
 		}
 
+	private function notificaciones(){	
+			if($this->get_request_method() != "GET"){
+				$this->response('',406);
+			}
+				$query="SELECT notification_msg FROM sistema";
+				
+				$r = $this->mysqli->query($query) or die($this->mysqli->error.__LINE__);
 
+				$result = array();
+				if($r->num_rows > 0){
+					while($row = $r->fetch_assoc()){
+						$result[] = array_map('utf8_encode', $row);
+					}
+				} else {
+					$result="";
+				}
+			$this->response($this->json($result), 200);
+		}
 
-
+		private function update_notification(){
+			if($this->get_request_method() != "GET"){
+				$this->response('',406);
+			}
+			$id = (int)$this->_request['id'];
+			if($id > 0){				
+				$query="UPDATE usuarios SET notification_show = 0 WHERE id = $id";
+				$r = $this->mysqli->query($query) or die($this->mysqli->error.__LINE__);
+				$success = array('status' => "Success", "msg" => "Se actualizó el registro.");
+				$this->response($this->json($success),200);
+			}else
+				$this->response('',204);
+		}
 
 		/*
 		 *	Encode array into JSON

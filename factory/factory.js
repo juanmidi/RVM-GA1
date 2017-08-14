@@ -159,6 +159,15 @@ app.factory("services", ['$http', function ($http) {
         return id;
     };
 
+    obj.getNotification = function () {
+        return $http.get(serviceBase + 'notificaciones');
+    };
+
+    obj.updateNotification = function (id) {
+        console.log("id " + id)
+        return $http.get(serviceBase + 'update_notification?id=' + id);
+    };
+
     return obj;
 }]);
 
@@ -181,7 +190,7 @@ app.factory('alumnoId', function ($rootScope) {
 
 app.factory('LoginService', function ($rootScope, services, $http) {
     var isAuthenticated = false,
-        role = '', id='', nombre='';
+        role = '', id='', nombre='', mostrarNotificacion='';
 
     return {
         login: function (username, password) {
@@ -194,6 +203,7 @@ app.factory('LoginService', function ($rootScope, services, $http) {
                 role = results.data.role;
                 id = results.data.id;
                 nombre = results.data.nombre;
+                mostrarNotificacion = results.data.notification_show;
                 return role;
             });
         },
@@ -212,6 +222,14 @@ app.factory('LoginService', function ($rootScope, services, $http) {
         nombre: function () {
             $rootScope.nombre = nombre;
             return nombre;
+        },
+        getNotificacion: function () {
+            $rootScope.mostrarNotificacion = mostrarNotificacion;
+            return mostrarNotificacion;
+        },
+        setNotificacion: function (val) {
+            mostrarNotificacion = val;
+            $rootScope.mostrarNotificacion = mostrarNotificacion;
         },
         logout: function () { 
             isAuthenticated=false;

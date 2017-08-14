@@ -20,11 +20,37 @@ app.controller('mainController', function ($scope, LoginService, services) {
     var fecha_f = f.getFullYear() + '-' + (f.getMonth() + 1) + '-' + (f.getDate());
     $scope.fecha = format_fecha(fecha_f);
     $scope.id_mes = f.getMonth() + 1;
-    //alumnoId.picho("");
+
+    
+    $scope.logout = function () {
+        LoginService.logout();
+        location.reload();
+    }
+
+});
+
+app.controller('inicioCtrl', function ($scope, LoginService, services) {
+    $scope.role = LoginService.role();
+    $scope.nombre = LoginService.nombre();
+    
+    services.getNotification().then(function (data) {
+        //$scope.textoNotificacion = "<pre>" + data.data[0].notification_msg +"</pre>";
+        $scope.textoNotificacion = data.data[0].notification_msg;
+        console.log($scope.textoNotificacion);
+    });
 
     services.getVersion().then(function (data) {
         $scope.version = data.data.version;
     });
+
+    if(LoginService.getNotificacion() == 0){
+        $("#notification-number").html("0");
+        $scope.textoNotificacion = "Estás al día";
+    } else {
+        $("#notification-number").html("1");
+        $("#notification-number").removeClass("badge-notify-grey");
+        $("#notification-number").addClass("badge-notify-red");
+    }
 
     angular.element(document).ready(function () {
         $("#version").on("click", function () {
@@ -40,35 +66,24 @@ app.controller('mainController', function ($scope, LoginService, services) {
         })
 
         $("#notificaciones").on("click", function () {
-            var texto = "Estás al día";
-
             swal({
-                title: "<small>Notificaciones</small>",
-                text: texto,
-                html: true
-            });
+                    title: "<h4>Notificaciones</h4>",
+                    text: $scope.textoNotificacion,
+                    html: true
+                },
+                function(){
+                    if (LoginService.getNotificacion() == 1){
+                        LoginService.setNotificacion(0);
+                        $("#notification-number").html("0");
+                        $("#notification-number").removeClass("badge-notify-red");
+                        $("#notification-number").addClass("badge-notify-grey");
+                        services.updateNotification(LoginService.id());
+                    }
+                }
+            );
+            
         })
     })
-
-    $scope.getNotificaciones = function () {
-        $("#notification-number").html("0");
-        // $("#notification-number").removeClass("badge-notify-grey");
-        // $("#notification-number").addClass("badge-notify-red");
-    }
-
-    $scope.getNotificaciones();
-
-    $scope.logout = function () {
-        LoginService.logout();
-        location.reload();
-    }
-
-});
-
-app.controller('inicioCtrl', function ($scope, LoginService) {
-    $scope.role = LoginService.role();
-    $scope.nombre = LoginService.nombre();
-
 });
 
 app.controller('reciboCtrl', function ($scope, $routeParams, services, $window, $timeout, $route) {
