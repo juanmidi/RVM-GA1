@@ -1,0 +1,54 @@
+<div class="loading-spiner-holder" data-loading>
+    <div>
+        <img src="img/load.gif" />
+        <span>cargando...</span>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <h1>Aviso de Deuda</h1>
+    <nav class="navbar navbar-default" role="navigation">
+            <div class="navbar-header"> &nbsp;&nbsp;
+                <a id="btn_imprimir" class="btn btn-default navbar-btn" role="button" ng-click="imprimir()"><span class="glyphicon glyphicon-print"></span>&nbsp;Imprimir</a>
+            </div>
+        </nav>
+    <p class="text-right">{{fecha}}<p/>
+    <div id="mensaje" class="row">
+        <div>
+            {{sistema[0].msgMorosos1}}
+        </div>
+    </div>
+    <p>&nbsp;</p>
+    <div class="row">
+        <table id="mainTable" class="table">
+            <thead>
+                <th class="text-left">Detalle&nbsp;</th>
+                <th class="text-right">Arancel&nbsp;</th>
+                <th class="text-right">rec.&nbsp;</th>
+                <th class="text-right">desc.&nbsp;</th>
+                <th class="text-right">Importe&nbsp;</th>
+                <!-- <th>alumno_id&nbsp;</th> -->
+            </thead>
+            <tfoot>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td class="text-right"><strong>Total</strong></td>
+                    <td class="text-right"><strong>{{totalcol | currency}}</strong></td>
+                </tr>
+            </tfoot>
+            <tbody>
+                <tr ng-repeat="item in deuda">
+                    <td>{{item.nombrealumno}} - {{item.descrip}}</td>
+                    <td class="text-right">{{item.preciounit}}</td>                    
+                    <td class="text-right">{{item.recargo}}</td>                    
+                    <td class="text-right">{{item.descuento}}</td>                    
+                    <td class="text-right">{{item.importe}}</td>                    
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+        

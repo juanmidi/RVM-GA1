@@ -8,7 +8,7 @@
   body { 
     margin: 1.6cm; 
   }
-    #encabezado-tabla, #numero, #fecha, #hora, #numeroletras, #importe {
+    #encabezado-tabla, #numero, #fecha, #hora, #numeroletras, #importe, #mensaje {
     font-size: 160% !important;
   }
   

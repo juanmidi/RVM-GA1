@@ -6,8 +6,9 @@ app.constant('OPTIONS', {
   bobo: 2
 })
 
-app.config(['$routeProvider',
-  function($routeProvider) {
+app.config(['$locationProvider','$routeProvider', 
+  function ($locationProvider, $routeProvider ) {
+    $locationProvider.hashPrefix('');
     $routeProvider
       .when('/', {
         title: 'Ingresar',
@@ -43,6 +44,21 @@ app.config(['$routeProvider',
         title: 'Morosos',
         templateUrl: 'partials/morosos.html',
         controller: 'morososCtrl'
+      })
+      .when('/notamoroso/:AlumnoID/mes/:mes', {
+        title: 'Nota a Moroso',
+        templateUrl: 'partials/notamoroso.html',
+        controller: 'notaMorosoCtrl',
+        resolve: {
+          deuda: function(services, $route){
+            var AlumnoID = $route.current.params.AlumnoID;
+            var mes = $route.current.params.mes;
+            return services.notaMoroso(AlumnoID, mes);  
+          },
+          sistema: function(services){
+            return services.getDatosSistema();  
+          }
+        }
       })
       .when('/edit-alumno/:AlumnoID', {
         title: 'Editar Alumno',

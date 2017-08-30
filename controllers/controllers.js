@@ -283,7 +283,62 @@ app.controller('morososCtrl', function ($scope, services, $routeParams, $locatio
             services.deleteRecibo(id);
         $("#fila-" + id).hide(1000);
     }
+
+    $scope.notaMoroso = function (id){
+        var c = '/notamoroso/' + id + "/mes/" + mes;
+        console.log("c: " + c);
+        
+        $location.path(c);
+    }
 });
+
+app.controller('notaMorosoCtrl', function ($scope, services, $routeParams, 
+                                            $timeout, $window, deuda, sistema){
+    var AlumnoID = ($routeParams.AlumnoID) ? parseInt($routeParams.AlumnoID) : 0;
+
+    $scope.deuda = deuda.data;
+    $scope.sistema = sistema.data;
+    var f = new Date();
+    var fecha_f =  (f.getDate()) + '-' + (f.getMonth() + 1)  +'-'+f.getFullYear()
+    $scope.fecha = format_fecha(fecha_f);
+    
+
+    // $scope.init = function (idAlumno) {
+    //     services.getRecibo(idAlumno, mes).then(function (data) {
+    //         $scope.servicios = data.data;
+    //         console.log( $scope.servicios)
+    //     });
+    // }
+
+    // $scope.init(AlumnoID);
+
+    $scope.getTotalCol = function () {
+        $timeout(function () {
+            var suma = 0;
+            var v;
+            // index = 0;
+            $('table tr').not(':first').each(function () {
+                v = parseFloat($(this).find('td').eq(4).text());
+                if (!isNaN(v)){
+                    suma += v;
+                }
+            })
+            $scope.totalcol = suma;
+            $scope.numtoletras = (suma > 0) ? "Son " + NumeroALetras(suma) : '';
+            $scope.$apply();
+        });
+    }
+
+    $scope.getTotalCol();
+
+    $scope.imprimir = function () {
+        if ($window.confirm("¿imprime?")) {
+            $window.print();
+        }
+    }
+
+
+})
 
 app.controller('listCtrl', function ($scope, services, $timeout) {
     services.getAlumnos().then(function (data) {

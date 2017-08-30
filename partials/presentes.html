@@ -37,7 +37,7 @@
         <div class="form-group">
             <div class="col-sm-4">
                 <label> Curso </label>
-                   <select id="curso" ng-model="curso" class="form-control" ng-options="c.id as c.nombre for c in cursos">  
+                   <select id="curso" ng-model="curso" class="form-control" ng-options="c.id as (c.nombre + ' | ' + c.descrip) for c in cursos">  
                        <option value="">-- seleccione--</option>
                     </select> 
                    <!-- <select id="curso" class="form-control">  

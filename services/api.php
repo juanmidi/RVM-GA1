@@ -295,8 +295,54 @@
 			$this->response('',204);	// If no records "No Content" status
 		}
 
+		private function nota_moroso(){	
+			if($this->get_request_method() != "GET"){
+				$this->response('',406);
+			}
 
-private function deleteRecibo(){
+			$id = (int)$this->_request['id'];
+			$mes = (int)$this->_request['mes'];
+
+			$query="SELECT concat(apellido,', ', nombre) AS nombrealumno, descrip, 
+				preciounit, recargo, descuento, importe, LPAD(id_mes,2,'0') as mes, anio,servicios_r.id, alumnos.id as alumno_id
+				FROM servicios_r INNER JOIN alumnos ON servicios_r.id_alumno = alumnos.id 
+				WHERE `id_mes` <= $mes AND `pago` = 0 AND servicios_r.id_alumno = $id
+				ORDER BY nombrealumno";
+
+			$r = $this->mysqli->query($query) or die($this->mysqli->error.__LINE__);
+
+			if($r->num_rows > 0){
+				$result = array();
+				while($row = $r->fetch_assoc()){
+					//$result[] = $row;
+					 $result[] =array_map('utf8_encode', $row);
+				}	
+				$this->response($this->json($result), 200); // send user details
+			}
+			$this->response('',204);	// If no records "No Content" status
+		}
+
+		private function sistema(){	
+			if($this->get_request_method() != "GET"){
+				$this->response('',406);
+			}
+
+			$query="SELECT * FROM sistema";
+
+			$r = $this->mysqli->query($query) or die($this->mysqli->error.__LINE__);
+
+			if($r->num_rows > 0){
+				$result = array();
+				while($row = $r->fetch_assoc()){
+					 $result[] =array_map('utf8_encode', $row);
+				}	
+				$this->response($this->json($result), 200);
+			}
+			$this->response('',204);
+		}
+
+
+		private function deleteRecibo(){
 			if($this->get_request_method() != "DELETE"){
 				$this->response('',406);
 			}
@@ -311,7 +357,7 @@ private function deleteRecibo(){
 		}
 
 
-private function updateMoroso(){
+		private function updateMoroso(){
 			if($this->get_request_method() != "POST"){
 				$this->response('',406);
 			}
@@ -325,7 +371,7 @@ private function updateMoroso(){
 				if(!empty($id[$x]))
 					$r = $this->mysqli->query($query) or die($this->mysqli->error.__LINE__);
 			}
-	}
+		}
 
 
 		private function cursos(){	
@@ -802,6 +848,28 @@ private function updateRecibo(){
 				$this->response($this->json($success),200);
 			}else
 				$this->response('',204);
+		}
+
+		private function presentespormes(){
+			if($this->get_request_method() != "GET"){
+				$this->response('',406);
+			}
+			$idcurso = (int)$this->_request['idcurso'];
+			$mes = (int)$this->_request['mes'];
+			
+			$query="SELECT notification_msg FROM sistema";
+
+			$r = $this->mysqli->query($query) or die($this->mysqli->error.__LINE__);
+
+			$result = array();
+			if($r->num_rows > 0){
+				while($row = $r->fetch_assoc()){
+					$result[] = array_map('utf8_encode', $row);
+				}
+			} else {
+				$result="";
+			}
+			$this->response($this->json($result), 200);
 		}
 
 		/*

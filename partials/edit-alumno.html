@@ -103,7 +103,7 @@
                                             <option ng-repeat="curso in cursos" value="{{curso.id}}">{{curso.nombre}}</option>
                                         </select>  -->
                                         
-                                        <select ng-options="c.id as c.nombre for c in cursos" name="curso" class="form-control" ng-model="customer.id_curso" required>
+                                        <select ng-options="c.id as (c.nombre + ' | ' + c.descrip ) for c in cursos" name="curso" class="form-control" ng-model="customer.id_curso" required>
                                         </select> 
 
 

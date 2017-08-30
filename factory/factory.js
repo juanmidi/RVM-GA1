@@ -69,6 +69,10 @@ app.factory("services", ['$http', function ($http) {
         return $http.get(serviceBase + 'morosos?mes=' + mes);
     };
 
+    obj.notaMoroso = function (id, mes) {
+        return $http.get(serviceBase + 'nota_moroso?id=' + id + '&mes=' + mes);
+    };
+
     obj.getCursos = function () {
         return $http.get(serviceBase + 'cursos');
     };
@@ -151,6 +155,10 @@ app.factory("services", ['$http', function ($http) {
         return $http.get(serviceBase + 'presente?idalumno=' + idalumno + "&fecha=" + fecha + "&estado=" + estado + "&idcurso=" + idcurso);
     };
 
+    obj.getPresentesPorMes = function (idalumno, idcurso) {
+        return $http.get(serviceBase + 'presentespormes?idcurso=' + idcurso + "&mes=" + mes);
+    };
+
     obj.getVersion = function () {
         return $http.get(serviceBase + 'version');
     };
@@ -167,6 +175,11 @@ app.factory("services", ['$http', function ($http) {
         console.log("id " + id)
         return $http.get(serviceBase + 'update_notification?id=' + id);
     };
+
+    obj.getDatosSistema = function () {
+        return $http.get(serviceBase + 'sistema');
+    };
+
 
     return obj;
 }]);

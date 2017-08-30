@@ -36,7 +36,7 @@
                     <tr ng-repeat="curso in cursos | filter: filterCurso" id="po" ondrop="drop(event)" ondragover="allowDrop(event)">
                         <td class="col-xs-6 ">
                             <div class="tools-popup">
-                                {{curso.nombre}}
+                                {{curso.nombre}} | {{curso.descrip}}
                                 <span id="profe-{{cp.id_usuario}}" class="hidden">
                                         <i ng-click="caca(cp.id_usuario)" class="glyphicon glyphicon-remove"></i>
                                         <i ng-click="caca(cp.id_usuario)" class="glyphicon glyphicon-pencil"></i>

@@ -5,7 +5,7 @@
 		const DB_SERVER = "127.0.0.1";
 		const DB_USER = "root";
 		const DB_PASSWORD = "";
-		const DB = "escuela1_gimnasio";
+		const DB = "escuela1_desarrollo";
 
 		
 		
@@ -132,9 +132,44 @@ function garcha(){
 			}
 		}
 
+
+		function presentespormes(){	
+			$mysqli = new mysqli(DB_SERVER,DB_USER,DB_PASSWORD,DB);
+
+			$userid = 1;
+			$fechas = strtotime("2017-08-05");
+			$last_day = date("t", $fechas);
+
+				for ($i=1; $i <= $last_day ; $i++) { 
+				$fech = date("Y", $fechas)."-". date("m", $fechas) ."-". $i;
+				echo $fech . "<br>";
+				$query="SELECT p.alumno_id, a.nombre FROM presentes p
+						INNER JOIN alumnos a
+						ON p.alumno_id = a.id
+						WHERE FECHA='$fech'";
+
+				$r = $mysqli->query($query) or die($mysqli->error.__LINE__);
+
+				if($r->num_rows > 0){
+					$result = array();
+					while($row = $r->fetch_assoc()){
+						//$result[] = $row;
+						$result[] = array_map('utf8_encode', $row);
+					}	
+					echo "<pre>";
+					print_r($result);
+					echo "</pre>";
+				}
+			}
+		}
+
 // garcha();
 // cursos_usuarios();
-profe_cursos();
+// profe_cursos();
+
+
+
+presentespormes();
 ?>
 	
 	

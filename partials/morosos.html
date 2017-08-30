@@ -39,9 +39,10 @@
                         <td class="hidden">{{data.id}}</td>
                         <td>{{data.nombrealumno}} - {{data.descrip}}</td>
                         <td>{{data.importe}}</td>
-                        <!-- <td>{{data.alumno_id}}</td> -->
+                        <!--  <td>{{data.alumno_id}}</td> -->
                         <td>
                             <span ng-click="recibo(data.alumno_id)" class="btn" title="Ir a Recibo">&nbsp;<i class="glyphicon glyphicon-share"></i></span>
+                            <span ng-click="notaMoroso(data.alumno_id)" class="btn" title="Nota a Moroso">&nbsp;<i class="glyphicon glyphicon-file"></i></span>
                             <span ng-click="delete(data.id)" class="btn" title="Eliminar de la base de datos">&nbsp;<i class="glyphicon glyphicon-trash"></i></span>
                         </td>
                         <td class="hidden">{{data.anio}}-{{data.mes}}-10</td>
@@ -94,10 +95,5 @@
                 }
             }
         });
-
-
-        // $(':checkbox').on('click', function(){
-        //     console.log("po");
-        // })
     });
 </script>
