@@ -123,6 +123,16 @@ app.factory("services", ['$http', function ($http) {
         });
     };
 
+    obj.eliminarMorosos = function (id) {
+        return $http.post(serviceBase + 'eliminarMorosos', {
+            id: id
+        }).then(function (status) {
+            return status.data;
+        });
+    };
+
+
+
     obj.updateRecibo = function (data, num_rec) {
         return $http.post(serviceBase + 'updateRecibo', {
             data: data,

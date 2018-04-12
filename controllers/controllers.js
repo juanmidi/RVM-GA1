@@ -96,6 +96,7 @@ app.controller('reciboCtrl', function ($scope, $routeParams, services, $window, 
 
     services.getRecibo(AlumnoID, mes).then(function (data) {
         $scope.servicios = data.data;
+		console.log(data.data);
     });
 
     services.getNumeros().then(function (data) {
@@ -273,6 +274,23 @@ app.controller('morososCtrl', function ($scope, services, $routeParams, $locatio
         }
     }
 
+    $scope.deleteMorosos = function () {
+        if (confirm("¿Elimina los conceptos seleccionados?") == true) {
+            var ids = [],
+                columnaId = 1,
+                id;
+            $('#tablita tr').not(':first').each(function () {
+                if ($(this).find('input[type="checkbox"]').is(':checked')) {
+                    id = $(this).find('td').eq(columnaId).text();
+                    ids.push(id);
+                    $("#fila-" + id).hide(1000);
+                }
+            })
+            console.log(ids)
+            services.eliminarMorosos(ids);
+        }
+    }
+
     $scope.recibo = function (idAlumno) {
         var c = "/recibo/" + idAlumno + "/mes/" + mes;
         $location.path(c);
@@ -349,10 +367,10 @@ app.controller('listCtrl', function ($scope, services, $timeout) {
     $scope.init = function(){
         $timeout(function () {
             var po = localStorage.getItem("idAlumno");
-            if ( po === null || po === "" || po === "undefined"){
+            if ( po === null || po === "" || po === "undefined" || po === undefined || po == 0){
                 var p=1;
             }else{
-                po = (po == "") ? "#top" : "#id" + po;
+                po = (po === null || po === "" || po === "undefined" || po === undefined || po == 0) ? "#top" : "#id" + po;
                 $(document).scrollTop($(po).offset().top);
             }
         }, 1)
@@ -377,6 +395,7 @@ app.controller('editCtrl', function ($scope, $route, $rootScope, $location, $rou
     original._id = AlumnoID;
     $scope.customer = angular.copy(original);
     $scope.customer._id = AlumnoID;
+
 
     $(document).scrollTop($("#top").offset().top);
 
@@ -436,12 +455,15 @@ app.controller('editCtrl', function ($scope, $route, $rootScope, $location, $rou
         if (AlumnoID <= 0) {
             services.insertAlumno(customer).then(function (status) {
                 console.log("status.data.id -->")
-                console.log(status.data.id)
+                console.log(status)
+                console.log("customer")
+                console.log(customer)
                 $scope.generarDeuda(status.data.id);
             });
             services.getAlumnos();
         } else {
             services.updateAlumno(AlumnoID, customer).then(function (status) {
+            		console.log(status)
                 $scope.generarDeuda(AlumnoID);
             })
         }
@@ -553,7 +575,6 @@ app.controller('configuracionCtrl', function ($scope, services, configuracion) {
     
     services.getAlumnos().then(function (data) {
         $scope.alumnos = data.data;
-
     })
 
     $scope.generarDeudaAnual = function () {

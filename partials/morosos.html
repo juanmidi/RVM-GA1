@@ -17,6 +17,7 @@
         <form class="form-group">
             <div class="col-sm-9">
                 <a id="btn_marcarpago" class="btn btn-default navbar-btn disabled" ng-click="update()" role="button"><span class="glyphicon glyphicon-ok"></span>&nbsp;Marcar como pago</a>
+                <a id="btn_borrar" class="btn btn-default navbar-btn disabled" ng-click="deleteMorosos()" role="button"><span class="glyphicon glyphicon-remove"></span>&nbsp;Eliminar Marcados</a>
             </div>
         </form>
     </div>
@@ -87,10 +88,16 @@
                 if (x == 0) {
                     $("#btn_marcarpago").removeClass('enabled');
                     $("#btn_marcarpago").addClass('disabled');
+                    $("#btn_borrar").removeClass('enabled');
+                    $("#btn_borrar").addClass('disabled');
                 } else {
                     if ($("#btn_marcarpago").hasClass('disabled')) {
                         $("#btn_marcarpago").removeClass('disabled');
                         $("#btn_marcarpago").addClass('enabled');
+                    };
+                    if ($("#btn_borrar").hasClass('disabled')) {
+                        $("#btn_borrar").removeClass('disabled');
+                        $("#btn_borrar").addClass('enabled');
                     };
                 }
             }

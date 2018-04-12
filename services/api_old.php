@@ -470,22 +470,6 @@
 			}
 		}
 
-		private function eliminarMorosos(){
-			if($this->get_request_method() != "POST"){
-				$this->response('',406);
-			}
-
-			$data = json_decode(file_get_contents("php://input"),true);
-			$id = $data['id'];
-			//$fecha = $data['fecha'];
-			$longitud = count($id);
- 			for($x = 0; $x < $longitud; $x++) {
-				$query = "DELETE FROM servicios_r WHERE id=$id[$x]";
-				if(!empty($id[$x]))
-					$r = $this->mysqli->query($query) or die($this->mysqli->error.__LINE__);
-			}
-		}
-
 
 		private function cursos(){	
 			if($this->get_request_method() != "GET"){
@@ -669,19 +653,16 @@ private function generarDeudaAlumno(){
 							WHERE id_concepto=$id_concepto AND
 								id_mes=$mes AND
 								anio='$anio' AND
-								id_alumno=$id AND
-								importe=$importe)";
+								id_alumno=$id)";
 
-			// $sql = "INSERT INTO servicios_r (cantidad, id_concepto, descrip, id_mes, anio, id_alumno, preciounit, recargo, descuento, importe, pago) 
-			// 					VALUES (1, $id_concepto, '$descrip', $mes, '$anio', $id, $preciounit, 0, 0, $importe,0)";
-								
+			$r = $this->mysqli->query($sql); // or die($this->mysqli->error.__LINE__);
 
-
-
-			$r = $this->mysqli->query($sql) or die($this->mysqli->error.__LINE__);
+			
 
 			//concepto *** CUOTA ***
 			$id_concepto=2; 
+			//**********************
+
 			$es_hermano=(int)$result2[0]['eshermano'];
 			$una_vez_sem=(int)$result2[0]['unavezsem'];
 
@@ -703,7 +684,7 @@ private function generarDeudaAlumno(){
 				$descrip=utf8_decode($descrip);
 				
 				$sql = "INSERT INTO servicios_r (cantidad, id_concepto, descrip, id_mes, anio, id_alumno, preciounit, recargo, descuento, importe, pago) 
-							SELECT 1, $id_concepto, '$descrip', $mes, '$anio', $id, $preciounit, 0, $descuento, $importe,0
+							SELECT 1, $id_concepto, '$descrip', $mes, '$anio', $id, $preciounit, 0, $descuento, $importe, 0
 							FROM dual
 							WHERE NOT EXISTS (
 								SELECT * FROM servicios_r 
@@ -715,9 +696,11 @@ private function generarDeudaAlumno(){
 				// $sql = "INSERT INTO servicios_r (cantidad, id_concepto, descrip, id_mes, anio, id_alumno, preciounit, recargo, descuento, importe, pago) 
 				// 				VALUES (1, $id_concepto, '$descrip', $mes, '$anio', $id, $preciounit, 0, $descuento, $importe,0)";
 
-				$r = $this->mysqli->query($sql) or die($this->mysqli->error.__LINE__);
+				$r = $this->mysqli->query($sql); // or die($this->mysqli->error.__LINE__);
 			}
-		}
+
+			
+}
 
 private function borrarDeudaAlumno(){
 		if($this->get_request_method() != "DELETE"){
